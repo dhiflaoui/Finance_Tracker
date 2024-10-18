@@ -1,5 +1,5 @@
 <template>
-  <header class="flex justify-between items-center">
+  <header class="flex justify-between items-center mt-10">
     <NuxtLink to="/" class="text-xl font-bold"> My_Finance_Tracker </NuxtLink>
     <div>
       <UAvatar
