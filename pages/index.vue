@@ -14,37 +14,38 @@
     <Trend
       color="green"
       title="Total Income"
-      :amount="1000"
-      :lastAmount="100"
+      amount="1000"
+      lastAmount="100"
       :loading="false"
     />
     <Trend
       color="red"
       title="Expenses"
       amount="1000"
-      :lastAmount="100"
+      lastAmount="100"
       :loading="false"
     />
     <Trend
       color="green"
       title="Investments"
-      :amount="1000"
-      :lastAmount="100"
+      amount="1000"
+      lastAmount="100"
       :loading="false"
     />
     <Trend
       color="red"
       title="Savings"
-      :amount="0"
-      :lastAmount="0"
+      amount="0"
+      lastAmount="0"
       :loading="false"
     />
   </section>
   <section>
-    <Transaction />
-    <Transaction />
-    <Transaction />
-    <Transaction />
+    <Transaction
+      v-for="transaction in transactions"
+      :key="transaction.id"
+      :transaction="transaction"
+    />
   </section>
 </template>
 <script setup>
@@ -53,5 +54,18 @@ import Transaction from "./components/transaction.vue";
 import { ref } from "vue";
 import { transactionViewOptions } from "~/constants";
 const viewSelection = ref(transactionViewOptions[1]);
-const { data: transactions } = await useFetch("/api/transactions");
+const supabase = useSupabaseClient();
+const transactions = ref([]);
+const { data, error } = await useAsyncData("transactions", async () => {
+  const { data, error } = await supabase.from("transactions").select();
+  if (error) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: "Transactions not found",
+    });
+  }
+  return data;
+});
+
+transactions.value = data.value;
 </script>
