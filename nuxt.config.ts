@@ -2,5 +2,8 @@
 export default defineNuxtConfig({
   compatibilityDate: "2024-04-03",
   devtools: { enabled: true },
-  modules: ["@nuxthq/ui"],
+  modules: ["@nuxthq/ui", "@nuxtjs/supabase"],
+  supabase: {
+    redirect: false,
+  },
 });
