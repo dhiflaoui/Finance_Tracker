@@ -50,7 +50,13 @@
             v-model="state.category"
           ></USelectMenu>
         </UFormGroup>
-        <UButton type="submit" color="black" label="Save" variant="solid" />
+        <UButton
+          type="submit"
+          color="black"
+          label="Save"
+          variant="solid"
+          :loading="isLoading"
+        />
       </UForm>
     </UCard>
   </UModal>
@@ -59,10 +65,11 @@
 <script setup>
 import { categories, types } from "~/constants";
 import { z } from "zod";
+const supabase = useSupabaseClient();
 const props = defineProps({
   modelValue: Boolean,
 });
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue", "saved"]);
 //Zod validation schema
 const defaultSchema = z.object({
   created_at: z.string(),
@@ -91,21 +98,61 @@ const schema = z.intersection(
   ]),
   defaultSchema
 );
+
 const isOpen = computed({
   get: () => props.modelValue,
-  set: (value) => emit("update:modelValue", value),
+  set: (value) => {
+    if (!value) resetForm();
+    emit("update:modelValue", value);
+  },
 });
-const state = ref({
+const initialState = {
   type: undefined,
   amount: 0,
   created_at: undefined,
   description: undefined,
   category: undefined,
+};
+const state = ref({
+  ...initialState,
 });
-
+const resetForm = () => {
+  Object.assign(state.value, initialState);
+};
 const form = ref();
+const isLoading = ref(false);
+const toast = useToast();
 const save = async () => {
-  form.value.validate();
+  if (form.value.errors.length) return;
+  try {
+    const { data, error } = await supabase
+      .from("transactions")
+      .upsert({ ...state.value });
+    isOpen.value = false;
+    emit("saved");
+    if (!error) {
+      toast.add({
+        title: "Transaction saved",
+        description: "Transaction saved successfully",
+        icon: "i-heroicons-check-circle",
+        color: "green",
+        iconColor: "green",
+      });
+      return;
+    }
+    throw error;
+  } catch (error) {
+    toast.add({
+      title: "Error",
+      description: "Error while saving transaction",
+      icon: "i-heroicons-exclamation-circle",
+      color: "red",
+      iconColor: "red",
+    });
+    console.log("error while saving transaction: ", error);
+  } finally {
+    isLoading.value = false;
+  }
 };
 </script>
 
