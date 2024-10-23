@@ -1,7 +1,8 @@
-export const useFetchTransactions = () => {
+export const useFetchTransactions = (period) => {
+  const supabase = useSupabaseClient();
   const transactions = ref([]);
   const pending = ref(false);
-  const supabase = useSupabaseClient();
+
   const income = computed(() => {
     return transactions.value.filter(
       (transaction) => transaction.type === "Income"
@@ -31,15 +32,20 @@ export const useFetchTransactions = () => {
   const fetchTransactions = async () => {
     pending.value = true;
     try {
-      const { data } = await useAsyncData("transactions", async () => {
-        const { data, error } = await supabase
-          .from("transactions")
-          .select()
-          .order("created_at", { ascending: false });
-        if (error) return [];
+      const { data } = await useAsyncData(
+        `transactions-${period.value.from.toDateString()}-${period.value.to.toDateString()}`,
+        async () => {
+          const { data, error } = await supabase
+            .from("transactions")
+            .select()
+            .gte("created_at", period.value.from.toISOString())
+            .gte("created_at", period.value.to.toISOString())
+            .order("created_at", { ascending: false });
+          if (error) return [];
 
-        return data;
-      });
+          return data;
+        }
+      );
       return data.value;
     } catch (error) {
       console.log("error while fetching transactions: ", error);
@@ -48,7 +54,9 @@ export const useFetchTransactions = () => {
     }
   };
   const refresh = async () => (transactions.value = await fetchTransactions());
+  watch(period, async () => await refresh(), { immediate: true });
   const transactGroupedByDate = computed(() => {
+    console.log("transactions.value: ", transactions.value);
     let grouped = {};
     for (let transaction of transactions.value) {
       const date = new Date(transaction.created_at).toISOString().split("T")[0];
@@ -63,7 +71,7 @@ export const useFetchTransactions = () => {
     transactions: {
       all: transactions,
       grouped: {
-        byDate: transactGroupedByDate,
+        byDate: transactGroupedByDate ?? {},
       },
       income,
       expense,

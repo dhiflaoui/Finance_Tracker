@@ -15,14 +15,14 @@
       color="green"
       title="Total Income"
       :amount="incomeTotal"
-      lastAmount="100"
+      :lastAmount="prevIncomeTotal"
       :loading="pending"
     />
     <Trend
       color="red"
       title="Expenses"
       :amount="expenseTotal"
-      lastAmount="100"
+      :lastAmount="prevExpenseTotal"
       :loading="pending"
     />
     <Trend
@@ -60,11 +60,7 @@
     </div>
   </section>
   <section v-if="!pending">
-    <div
-      v-for="(transactionsOnDay, date) in transactGroupedByDate"
-      :key="date"
-      class="mb-10"
-    >
+    <div v-for="(transactionsOnDay, date) in byDate" :key="date" class="mb-10">
       <DailyTransactionSummary :date="date" :transactions="transactionsOnDay" />
       <Transaction
         v-for="transaction in transactionsOnDay"
@@ -79,22 +75,23 @@
   </section>
 </template>
 <script setup>
+import { useSelectedTimePeriod } from "~/composables/useSelectedTimePeriod";
 import { transactionViewOptions } from "~/constants";
+const isOpen = ref(false);
+const viewSelection = ref(transactionViewOptions[1]);
+const { current, previous } = useSelectedTimePeriod(viewSelection);
 const {
   pending,
   refresh,
+  transactions: { incomeTotal, expenseTotal, incomeCount, expenseCount },
+  /* TODO fix this */
+  /*  grouped: { byDate }, */
+} = useFetchTransactions(current);
+const {
   transactions: {
-    income,
-    expense,
-    incomeTotal,
-    expenseTotal,
-    incomeCount,
-    expenseCount,
+    incomeTotal: prevIncomeTotal,
+    expenseTotal: prevExpenseTotal,
   },
-
-  grouped: { byDate: transactGroupedByDate },
-} = useFetchTransactions();
-const viewSelection = ref(transactionViewOptions[1]);
-const isOpen = ref(false);
+} = useFetchTransactions(previous);
 await refresh();
 </script>
