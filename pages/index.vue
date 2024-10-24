@@ -79,19 +79,26 @@ import { useSelectedTimePeriod } from "~/composables/useSelectedTimePeriod";
 import { transactionViewOptions } from "~/constants";
 const isOpen = ref(false);
 const viewSelection = ref(transactionViewOptions[1]);
+console.log("viewSelection: ", viewSelection);
 const { current, previous } = useSelectedTimePeriod(viewSelection);
 const {
   pending,
   refresh,
-  transactions: { incomeTotal, expenseTotal, incomeCount, expenseCount },
-  /* TODO fix this */
-  /*  grouped: { byDate }, */
+  transactions: {
+    incomeTotal,
+    expenseTotal,
+    incomeCount,
+    expenseCount,
+    grouped: { byDate },
+  },
 } = useFetchTransactions(current);
+console.log("byDate: ", byDate.value);
 const {
+  refresh: refreshPrevious,
   transactions: {
     incomeTotal: prevIncomeTotal,
     expenseTotal: prevExpenseTotal,
   },
 } = useFetchTransactions(previous);
-await refresh();
+await Promise.all([refresh(), refreshPrevious()]);
 </script>

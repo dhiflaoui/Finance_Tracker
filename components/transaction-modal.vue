@@ -16,7 +16,11 @@
           ></USelectMenu>
         </UFormGroup>
         <UFormGroup label="Amount" :required="true" name="amount" class="mb-4">
-          <UInput type="number" placeholder="Amount" v-model="state.amount" />
+          <UInput
+            type="number"
+            placeholder="Amount"
+            v-model.number="state.amount"
+          />
         </UFormGroup>
         <UFormGroup
           label="Transaction date"
@@ -43,6 +47,7 @@
           :required="true"
           name="category"
           class="mb-4"
+          v-if="state.type === 'Expense'"
         >
           <USelectMenu
             :options="categories"
@@ -98,7 +103,6 @@ const schema = z.intersection(
   ]),
   defaultSchema
 );
-
 const isOpen = computed({
   get: () => props.modelValue,
   set: (value) => {
@@ -123,33 +127,50 @@ const form = ref();
 const isLoading = ref(false);
 const toast = useToast();
 const save = async () => {
-  if (form.value.errors.length) return;
-  try {
-    const { data, error } = await supabase
-      .from("transactions")
-      .upsert({ ...state.value });
-    isOpen.value = false;
-    emit("saved");
-    if (!error) {
-      toast.add({
-        title: "Transaction saved",
-        description: "Transaction saved successfully",
-        icon: "i-heroicons-check-circle",
-        color: "green",
-        iconColor: "green",
-      });
-      return;
-    }
-    throw error;
-  } catch (error) {
+  const isValid = await form.value.validate();
+  if (!isValid) {
     toast.add({
-      title: "Error",
-      description: "Error while saving transaction",
+      title: "Validation Error",
+      description: "Please fix the errors in the form.",
       icon: "i-heroicons-exclamation-circle",
       color: "red",
       iconColor: "red",
     });
-    console.log("error while saving transaction: ", error);
+    return;
+  }
+  isLoading.value = true;
+  try {
+    const { error } = await supabase
+      .from("transactions")
+      .upsert({ ...state.value });
+    if (error) {
+      toast.add({
+        title: "Transaction not saved",
+        description: `Error while saving transaction ${error}`,
+        icon: "i-heroicons-exclamation-circle",
+        color: "red",
+        iconColor: "red",
+      });
+    }
+    /*  throw error; */
+    isOpen.value = false;
+    emit("saved");
+    toast.add({
+      title: "Transaction saved",
+      description: "Transaction saved successfully",
+      icon: "i-heroicons-check-circle",
+      color: "green",
+      iconColor: "green",
+    });
+  } catch (error) {
+    toast.add({
+      title: "Transaction not saved",
+      description: `Error while saving transaction ${error}`,
+      icon: "i-heroicons-exclamation-circle",
+      color: "red",
+      iconColor: "red",
+    });
+    console.error("error while saving transaction: ", error);
   } finally {
     isLoading.value = false;
   }

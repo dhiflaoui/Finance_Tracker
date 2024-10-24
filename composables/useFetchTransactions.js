@@ -1,4 +1,5 @@
 export const useFetchTransactions = (period) => {
+  console.log("period: ", period);
   const supabase = useSupabaseClient();
   const transactions = ref([]);
   const pending = ref(false);
@@ -46,6 +47,7 @@ export const useFetchTransactions = (period) => {
           return data;
         }
       );
+      console.log("data.value: ", data.value);
       return data.value;
     } catch (error) {
       console.log("error while fetching transactions: ", error);
@@ -54,9 +56,9 @@ export const useFetchTransactions = (period) => {
     }
   };
   const refresh = async () => (transactions.value = await fetchTransactions());
-  watch(period, async () => await refresh(), { immediate: true });
+  watch(period, async () => await refresh());
+  console.log("transactions.value : ", transactions.value);
   const transactGroupedByDate = computed(() => {
-    console.log("transactions.value: ", transactions.value);
     let grouped = {};
     for (let transaction of transactions.value) {
       const date = new Date(transaction.created_at).toISOString().split("T")[0];
@@ -67,11 +69,13 @@ export const useFetchTransactions = (period) => {
     }
     return grouped;
   });
+  console.log("transactGroupedByDate: ", transactGroupedByDate.value);
+
   return {
     transactions: {
       all: transactions,
       grouped: {
-        byDate: transactGroupedByDate ?? {},
+        byDate: transactGroupedByDate,
       },
       income,
       expense,
