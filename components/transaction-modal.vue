@@ -125,16 +125,13 @@ const resetForm = () => {
 };
 const form = ref();
 const isLoading = ref(false);
-const toast = useToast();
+const { toastSuccess, toastError } = useAppToast();
 const save = async () => {
   const isValid = await form.value.validate();
   if (!isValid) {
-    toast.add({
+    toastSuccess({
       title: "Validation Error",
       description: "Please fix the errors in the form.",
-      icon: "i-heroicons-exclamation-circle",
-      color: "red",
-      iconColor: "red",
     });
     return;
   }
@@ -144,31 +141,22 @@ const save = async () => {
       .from("transactions")
       .upsert({ ...state.value });
     if (error) {
-      toast.add({
+      toastError({
         title: "Transaction not saved",
         description: `Error while saving transaction ${error}`,
-        icon: "i-heroicons-exclamation-circle",
-        color: "red",
-        iconColor: "red",
       });
     }
     /*  throw error; */
     isOpen.value = false;
     emit("saved");
-    toast.add({
+    toastSuccess({
       title: "Transaction saved",
       description: "Transaction saved successfully",
-      icon: "i-heroicons-check-circle",
-      color: "green",
-      iconColor: "green",
     });
   } catch (error) {
-    toast.add({
+    toastError({
       title: "Transaction not saved",
       description: `Error while saving transaction ${error}`,
-      icon: "i-heroicons-exclamation-circle",
-      color: "red",
-      iconColor: "red",
     });
     console.error("error while saving transaction: ", error);
   } finally {

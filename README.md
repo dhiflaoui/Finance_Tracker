@@ -76,3 +76,4 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 
 #use nuxtui, nuxtsupabase
 using ZOD for validation
+use subapase auth for authentication
