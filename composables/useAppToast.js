@@ -1,6 +1,5 @@
 export const useAppToast = () => {
-  const { toastSuccess, toastError } = useAppToast();
-
+  const toast = useToast();
   return {
     toastSuccess: ({ title, description = null }) => {
       toast.add({

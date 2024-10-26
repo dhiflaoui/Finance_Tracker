@@ -1,5 +1,5 @@
 export const useFetchTransactions = (period) => {
-  console.log("period: ", period);
+  console.log("period: ", period.value);
   const supabase = useSupabaseClient();
   const transactions = ref([]);
   const pending = ref(false);
