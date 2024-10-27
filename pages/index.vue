@@ -82,7 +82,6 @@ const user = useSupabaseUser();
 const viewSelection = ref(
   user.value.user_metadata?.transaction_view ?? transactionViewOptions[1]
 );
-
 console.log("viewSelection: ", viewSelection.value);
 const { current, previous } = useSelectedTimePeriod(viewSelection);
 const {

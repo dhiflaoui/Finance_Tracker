@@ -8,7 +8,7 @@
         v-if="user"
       >
         <UAvatar
-          src="https://avatars.githubusercontent.com/u/739984?v=4"
+          :src="url ?? 'https://avatars.githubusercontent.com/u/739984?v=4'"
           alt="Avatar"
         />
         <template #account="{ item }">
@@ -33,6 +33,7 @@
   </header>
 </template>
 <script setup>
+const { avatarUrl: url } = useAvatarUrl();
 const user = useSupabaseUser();
 const supabase = useSupabaseClient();
 const items = [
