@@ -23,6 +23,12 @@
             icon="i-heroicons-ellipsis-horizontal"
             :loading="isLoading"
           />
+          <TransactionModal
+            v-model="isOpen"
+            :transaction="transaction"
+            @save="emit(editTransaction)"
+            @delete="deleteTransaction"
+          />
         </UDropdown>
       </div>
     </div>
@@ -30,6 +36,8 @@
 </template>
 
 <script setup>
+import TransactionModal from "./transaction-modal.vue";
+
 /* TODO: add currency param to useCurrency hook */
 const props = defineProps({
   transaction: {
@@ -37,11 +45,12 @@ const props = defineProps({
     default: {},
   },
 });
-const emit = defineEmits(["deleteTransaction"]);
+const emit = defineEmits(["deleteTransaction", "editTransaction"]);
 const { currency } = useCurrency(props.transaction.amount);
 let isLoading = ref(false);
 const { toastSuccess, toastError } = useAppToast();
 const supabase = useSupabaseClient();
+const isOpen = ref(false);
 const deleteTransaction = async () => {
   isLoading.value = true;
   try {
@@ -69,7 +78,7 @@ const items = [
       icon: "i-heroicons-pencil-square",
       color: "white",
       variant: "ghost",
-      click: () => {},
+      click: () => (isOpen.value = true),
     },
     {
       label: "Delete",
