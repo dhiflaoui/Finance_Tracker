@@ -1,6 +1,6 @@
 <template>
   <section class="flex items-center justify-between mb-10">
-    <h1>Summary</h1>
+    <h1 class="text-xl font-extrabold">Summary</h1>
     <div>
       <USelectMenu
         :options="transactionViewOptions"
@@ -83,8 +83,8 @@ const user = useSupabaseUser();
 const viewSelection = ref(
   user.value.user_metadata?.transaction_view ?? transactionViewOptions[1]
 );
-console.log("viewSelection: ", viewSelection.value);
 const { current, previous } = useSelectedTimePeriod(viewSelection);
+
 const {
   pending,
   refresh,
@@ -96,7 +96,6 @@ const {
     grouped: { byDate },
   },
 } = useFetchTransactions(current);
-console.log("byDate: ", byDate.value);
 const {
   refresh: refreshPrevious,
   transactions: {

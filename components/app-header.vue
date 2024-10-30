@@ -1,6 +1,6 @@
 <template>
   <header class="flex justify-between items-center mt-10">
-    <NuxtLink to="/" class="text-xl font-bold"> My_Finance_Tracker </NuxtLink>
+    <NuxtLink to="/" class="text-2xl font-bold"> My Finance Tracker </NuxtLink>
     <div>
       <UDropdown
         :items="items"

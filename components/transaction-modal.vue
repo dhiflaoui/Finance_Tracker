@@ -153,7 +153,7 @@ const save = async () => {
   }
   isLoading.value = true;
   try {
-    const { error } = await supabase
+    const { data: result, error } = await supabase
       .from("transactions")
       .upsert({ ...state.value, id: props.transaction?.id });
     if (error) {
@@ -162,6 +162,7 @@ const save = async () => {
         description: `Error while saving transaction ${error}`,
       });
     }
+    console.log("result: ", result);
     /*  throw error; */
     isOpen.value = false;
     emit("saved");
