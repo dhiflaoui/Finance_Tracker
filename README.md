@@ -41,7 +41,7 @@ npm install
 
 Run the development server:
 
-``bash
+```bash
 npm install
 
 Build for Production
@@ -51,6 +51,7 @@ Environment Variables
 
 SUPABASE_URL=your-supabase-url
 SUPABASE_KEY=your-supabase-key
+```
 
 ## Author
 
@@ -59,9 +60,9 @@ SUPABASE_KEY=your-supabase-key
 ## Contributing
 
 Fork the project
-Create your feature branch (git checkout -b feature/AmazingFeature)
-Commit your changes (git commit -m 'Add some AmazingFeature')
-Push to the branch (git push origin feature/AmazingFeature)
+Create your feature branch (git checkout -b feature/AmazingFeature) <br />
+Commit your changes (git commit -m 'Add some AmazingFeature') <br />
+Push to the branch (git push origin feature/AmazingFeature) <br />
 Open a Pull Request
 
 ## Show your support
