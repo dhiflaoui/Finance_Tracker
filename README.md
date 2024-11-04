@@ -1,79 +1,73 @@
-# Nuxt 3 Minimal Starter
+# Finance Tracker 💰
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+<h1 align="center">Welcome to Finance Tracker 👋</h1>
 
-## Setup
+A modern finance tracking application built with Nuxt.js and Supabase, helping you manage your personal finances effectively.
 
-Make sure to install the dependencies:
+## Features
+
+- 📊 Track income and expenses
+- 💳 Manage multiple accounts
+- 📈 Visualize financial data
+- 🔐 Secure authentication with Supabase
+- 🎨 Beautiful UI with Nuxt UI
+
+## Tech Stack
+
+- Nuxt.js
+- Supabase
+- Nuxt UI
+- TypeScript
+
+## Prerequisites
+
+- Node.js (v16 or higher)
+- npm or yarn
+- Supabase account
+
+## Installation
+
+1. Clone the repository:
 
 ```bash
-# npm
+git clone https://github.com/dhiflaoui/Finance_Tracker.git
+
+cd finance-tracker
+
+npm install
+```
+
+## Development
+
+Run the development server:
+
+``bash
 npm install
 
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
+Build for Production
 npm run build
 
-# pnpm
-pnpm run build
+Environment Variables
 
-# yarn
-yarn build
+SUPABASE_URL=your-supabase-url
+SUPABASE_KEY=your-supabase-key
 
-# bun
-bun run build
-```
+## Author
 
-Locally preview production build:
+👤 **Belgacem DHIFLAOUI**
 
-```bash
-# npm
-npm run preview
+## Contributing
 
-# pnpm
-pnpm run preview
+Fork the project
+Create your feature branch (git checkout -b feature/AmazingFeature)
+Commit your changes (git commit -m 'Add some AmazingFeature')
+Push to the branch (git push origin feature/AmazingFeature)
+Open a Pull Request
 
-# yarn
-yarn preview
+## Show your support
 
-# bun
-bun run preview
-```
+Give a ⭐️ if this project helped you!
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## License
 
-#use nuxtui, nuxtsupabase
-using ZOD for validation
-use subapase auth for authentication
+This project is licensed under the MIT License.
