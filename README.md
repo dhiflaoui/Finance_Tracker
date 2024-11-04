@@ -42,13 +42,18 @@ npm install
 Run the development server:
 
 ```bash
-npm install
+npm run dev
+```
 
-Build for Production
+Build for Production:
+
+```bash
 npm run build
+```
 
 Environment Variables
 
+```bash
 SUPABASE_URL=your-supabase-url
 SUPABASE_KEY=your-supabase-key
 ```
