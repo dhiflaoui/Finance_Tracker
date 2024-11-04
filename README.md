@@ -51,7 +51,7 @@ Build for Production:
 npm run build
 ```
 
-Environment Variables
+Environment Variables:
 
 ```bash
 SUPABASE_URL=your-supabase-url
