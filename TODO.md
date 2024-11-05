@@ -1,6 +1,6 @@
 ## TODO
 
-- [ ] Add button to change between dark/light mode
+- [x] Add button to change between dark/light mode
 - [ ] Improve signIN and login page
 - [ ] Add signUp page
 - [ ] Integrate Google Authentication
