@@ -70,6 +70,13 @@
         @editTransaction="refresh()"
       />
     </div>
+    <!-- TODO :  add a stickey header for the daily summary-->
+    <!--  <div class="sticky top-0 bg-white dark:bg-gray-900 z-10">
+        <DailyTransactionSummary
+          :date="date"
+          :transactions="transactionsOnDay"
+        />
+      </div> -->
   </section>
   <section v-else>
     <USkeleton class="h-10 w-full mb-2" v-for="i in 4" :key="i" />

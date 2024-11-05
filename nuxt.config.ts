@@ -6,4 +6,9 @@ export default defineNuxtConfig({
   supabase: {
     redirect: true,
   },
+  colorMode: {
+    preference: "system", // Default mode ('light', 'dark', or 'system')
+    fallback: "light", // Fallback mode if no preference is set
+    classSuffix: "", // Optional suffix for class names
+  },
 });
