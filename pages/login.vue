@@ -36,10 +36,13 @@
     </template>
   </UTabs>
 </template>
-<script setup lang="ts">
+<script setup>
 import SignIn from "~/components/auth/SignIn.vue";
 import SignUp from "~/components/auth/SignUp.vue";
 import { ref } from "vue";
+definePageMeta({
+  middleware: "auth",
+});
 const items = [
   {
     slot: "signIn",
@@ -52,6 +55,7 @@ const items = [
     icon: "i-heroicons-user-circle",
   },
 ];
+
 let selectedTab = ref(1);
 let defaultSelectedTab = ref(0);
 function switchTab() {

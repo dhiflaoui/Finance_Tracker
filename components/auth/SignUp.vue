@@ -51,7 +51,6 @@ import { z } from "zod";
 
 const { toastSuccess, toastError } = useAppToast();
 const supabase = useSupabaseClient();
-const redirectUrl = useRuntimeConfig().public.baseUrl;
 
 const accountSchema = z.object({
   password: z

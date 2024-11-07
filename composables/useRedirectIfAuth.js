@@ -1,9 +1,14 @@
-export const useIsUserLoggedIn = (url = "/") => {
+export const useRedirectIfAuth = (url = "/") => {
   const user = useSupabaseUser();
-  watch(user, (user) => {
-    if (user) {
-      navigateTo(url);
-    }
-  });
+  watch(
+    user,
+    (user) => {
+      console.log("user: ", user);
+      if (user) {
+        navigateTo(url);
+      }
+    },
+    { immediate: true }
+  );
   return { user };
 };

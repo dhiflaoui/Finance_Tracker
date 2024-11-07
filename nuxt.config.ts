@@ -11,4 +11,9 @@ export default defineNuxtConfig({
     fallback: "light", // Fallback mode if no preference is set
     classSuffix: "", // Optional suffix for class names
   },
+  runtimeConfig: {
+    public: {
+      baseUrl: process.env.BASE_URL ?? "http://localhost:3000",
+    },
+  },
 });

@@ -48,7 +48,6 @@ const handleLogin = async () => {
         emailRedirectTo: `${redirectUrl}/confirm`,
       },
     });
-
     if (error) {
       toastError({
         title: "Error authenticating",
@@ -57,10 +56,10 @@ const handleLogin = async () => {
     } else {
       success.value = true;
     }
+  } catch (error) {
+    console.error("Error authenticating:", error);
   } finally {
     pending.value = false;
   }
 };
 </script>
-
-<style lang="scss" scoped></style>
