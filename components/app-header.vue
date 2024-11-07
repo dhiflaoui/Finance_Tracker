@@ -81,7 +81,6 @@
   </header>
 </template>
 <script setup>
-let isDarkMode = ref(false);
 const { avatarUrl: url } = useAvatarUrl();
 const user = useSupabaseUser();
 const supabase = useSupabaseClient();

@@ -18,6 +18,7 @@ A modern finance tracking application built with Nuxt.js and Supabase, helping y
 - Supabase
 - Nuxt UI
 - TypeScript
+  -Zod
 
 ## Prerequisites
 
