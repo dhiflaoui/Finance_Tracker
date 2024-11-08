@@ -1,45 +1,84 @@
 <template>
-  <div v-if="!success">
+  <div v-if="!success" class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
     <form @submit.prevent="handleLogin">
       <UFormGroup
         label="Email"
         name="email"
-        class="mb-4"
+        class="mb-2 text-sm"
         :required="true"
         help="You will receive an email with the confirmation link"
       >
-        <UInput type="email" placeholder="Email" required v-model="email" />
+        <UInput
+          type="email"
+          placeholder="Email"
+          required
+          v-model="email"
+          @blur="validateField"
+        >
+          <template #leading>
+            <UIcon name="i-heroicons-envelope" />
+          </template>
+        </UInput>
       </UFormGroup>
+      <p :class="{ 'text-red-600': errors }" class="h-5 text-sm mb-2">
+        {{ errors }}
+      </p>
       <UButton
         type="submit"
         variant="solid"
-        color="black"
+        color="teal"
         :loading="pending"
-        :disabled="pending"
+        :disabled="pending || !!errors"
         >Sign-in</UButton
       >
     </form>
   </div>
   <UCard v-else>
-    <template #header> Email has been sent </template>
+    <template #header>
+      <span class="font-bold text-xl">Email has been sent</span>
+    </template>
     <div class="text-center">
       <p>
         We have sent an email to <strong>{{ email }}</strong> with a link to
         sign in
       </p>
-      <p><strong>Importing: </strong> the link will expire in 5 minutes.</p>
+      <p class="font-bold">Important: the link will expire in 5 minutes.</p>
     </div>
   </UCard>
 </template>
 
 <script setup>
+import { ref } from "vue";
+import { z } from "zod";
+
 const success = ref(false);
 const email = ref("");
 const pending = ref(false);
 const supabase = useSupabaseClient();
 const { toastError } = useAppToast();
 const redirectUrl = useRuntimeConfig().public.baseUrl;
+
+const emailSchema = z.string().email("Please enter a valid email address");
+
+const errors = ref("");
+
+const validateField = () => {
+  try {
+    emailSchema.parse(email.value);
+    errors.value = "";
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      errors.value = error.errors[0].message;
+    }
+  }
+};
+
 const handleLogin = async () => {
+  validateField();
+  if (errors.value) {
+    return;
+  }
+
   pending.value = true;
   try {
     const { error } = await supabase.auth.signInWithOtp({

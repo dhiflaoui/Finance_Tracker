@@ -5,13 +5,6 @@
     class="w-full"
     :defaultIndex="defaultSelectedTab"
   >
-    <!-- <template #icon="{ item, selected }">
-      <UIcon
-        :name="item.icon"
-        class="w-4 h-4 flex-shrink-0 me-2"
-        :class="[selected && 'text-primary-500 dark:text-primary-400']"
-      />
-    </template> -->
     <template #signIn="{ item }">
       <UCard>
         <template #header>

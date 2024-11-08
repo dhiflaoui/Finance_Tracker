@@ -1,5 +1,5 @@
 <template>
-  <UCard @submit.prevent="onSubmitAccount">
+  <UCard class="bg-gray-50 dark:bg-gray-800" @submit.prevent="onSubmitAccount">
     <form @submit.prevent="onSubmitAccount">
       <UFormGroup
         label="Full Name"
@@ -13,7 +13,13 @@
           required
         />
       </UFormGroup>
-      <UFormGroup label="Email" name="email" :error="errors.email" required>
+      <UFormGroup
+        label="Email"
+        name="email"
+        :error="errors.email"
+        required
+        class="mt-2"
+      >
         <UInput
           v-model="accountForm.email"
           @blur="validateField('email')"
@@ -25,6 +31,7 @@
         name="password"
         :error="errors.password"
         required
+        class="mb-4 mt-2"
       >
         <UInput
           type="password"
@@ -35,9 +42,10 @@
       <UButton
         type="submit"
         variant="solid"
-        color="black"
+        color="teal"
         :loading="pending"
         :disabled="pending || !isFormValid"
+        class="mt-2"
       >
         Sign-Up
       </UButton>
