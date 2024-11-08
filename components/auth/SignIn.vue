@@ -2,7 +2,7 @@
   <div v-if="!success" class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
     <form @submit.prevent="handleLogin">
       <UFormGroup
-        label="Email"
+        label="Email Address"
         name="email"
         class="mb-2 text-sm"
         :required="true"
@@ -10,10 +10,10 @@
       >
         <UInput
           type="email"
-          placeholder="Email"
           required
           v-model="email"
           @blur="validateField"
+          placeholder="Enter your email"
         >
           <template #leading>
             <UIcon name="i-heroicons-envelope" />
@@ -27,6 +27,14 @@
         type="submit"
         variant="solid"
         color="teal"
+        size="lg"
+        :class="[
+          'rounded-xl shadow-md',
+          {
+            'transition-transform hover:scale-[1.02] active:scale-[0.98]':
+              !pending && !errors,
+          },
+        ]"
         :loading="pending"
         :disabled="pending || !!errors"
         >Sign-in</UButton

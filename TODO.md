@@ -4,7 +4,6 @@
 - [x] Add signUp page
 - [ ] Improve signIn and SignUp page
 - [ ] change color when light mode and dark mode
-- [ ] migrate the project to TS
 - [ ] Create alert when the user passed the configured expense limit
 - [ ] Work on the investment page
 - [ ] Implement other currency choice
@@ -12,3 +11,5 @@
 - [ ] add search option for transactions
 - [ ] Write tests for the application
 - [ ] Improve error handling in frontend
+- [ ] migrate the project to Nuxt 4 with TS
+- [ ] upgrade to nuxt_ui 3 or 2.18.0 to swith between auth tabs

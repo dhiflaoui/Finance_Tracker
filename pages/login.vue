@@ -1,11 +1,11 @@
 <template>
   <UTabs
-    v-model="selectedTab"
     :items="items"
-    class="w-full"
-    :defaultIndex="defaultSelectedTab"
+    variant="link"
+    class="gap-4 w-full"
+    :ui="{ trigger: 'flex-1' }"
   >
-    <template #signIn="{ item }">
+    <template #signIn>
       <UCard>
         <template #header>
           <p
@@ -13,19 +13,29 @@
           >
             Sign-in to Finance Tracker
           </p>
-          <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            or create an account
+          <!-- TODO: upgrade nuxtUi to lmake it work -->
+          <!-- <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            New user? Sign up
             <span class="cursor-pointer text-blue-500" @click="switchTab">
               here
             </span>
-          </p>
+          </p> -->
         </template>
         <SignIn />
       </UCard>
     </template>
 
-    <template #signUp="{ item }">
-      <SignUp :item="item" @saved="defaultTabChange()" />
+    <template #signUp>
+      <UCard>
+        <template #header>
+          <p
+            class="text-base font-semibold leading-6 text-gray-900 dark:text-white"
+          >
+            Sign-Up for the Finance Tracker
+          </p>
+        </template>
+        <SignUp />
+      </UCard>
     </template>
   </UTabs>
 </template>
@@ -40,22 +50,14 @@ const items = [
   {
     slot: "signIn",
     label: "SignIn",
-    icon: "i-heroicons-user-circle",
   },
   {
     slot: "signUp",
     label: "SignUp",
-    icon: "i-heroicons-user-circle",
   },
 ];
-
-let selectedTab = ref(1);
-let defaultSelectedTab = ref(0);
-function switchTab() {
-  selectedTab.value = 1;
-}
-function defaultTabChange() {
-  defaultSelectedTab.value = 1;
-  console.log("defaultSelectedTab.value : ", defaultSelectedTab.value);
-}
+const activeTab = ref("signIn");
+const switchTab = () => {
+  activeTab.value = "signUp";
+};
 </script>

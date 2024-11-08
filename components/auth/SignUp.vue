@@ -11,7 +11,12 @@
           v-model="accountForm.fullName"
           @blur="validateField('fullName')"
           required
-        />
+          placeholder="Enter your Full Name"
+        >
+          <template #leading>
+            <UIcon name="i-heroicons-user" />
+          </template>
+        </UInput>
       </UFormGroup>
       <UFormGroup
         label="Email"
@@ -21,10 +26,15 @@
         class="mt-2"
       >
         <UInput
+          placeholder="Enter your email"
           v-model="accountForm.email"
           @blur="validateField('email')"
           required
-        />
+        >
+          <template #leading>
+            <UIcon name="i-heroicons-envelope" />
+          </template>
+        </UInput>
       </UFormGroup>
       <UFormGroup
         label="Password"
@@ -33,11 +43,28 @@
         required
         class="mb-4 mt-2"
       >
-        <UInput
-          type="password"
-          v-model="accountForm.password"
-          @blur="validateField('password')"
-        />
+        <div class="relative">
+          <UInput
+            :type="showPassword ? 'text' : 'password'"
+            v-model="accountForm.password"
+            @blur="validateField('password')"
+            placeholder="Enter your password"
+          >
+            <template #leading>
+              <UIcon name="i-heroicons-lock-closed" />
+            </template>
+          </UInput>
+          <button
+            type="button"
+            class="absolute right-2 top-1/2 -translate-y-1/2"
+            @click="showPassword = !showPassword"
+          >
+            <UIcon
+              :name="showPassword ? 'i-heroicons-eye-slash' : 'i-heroicons-eye'"
+              class="h-5 w-5 text-gray-500"
+            />
+          </button>
+        </div>
       </UFormGroup>
       <UButton
         type="submit"
@@ -45,7 +72,14 @@
         color="teal"
         :loading="pending"
         :disabled="pending || !isFormValid"
-        class="mt-2"
+        size="lg"
+        :class="[
+          'rounded-xl shadow-md',
+          {
+            'transition-transform hover:scale-[1.02] active:scale-[0.98]':
+              !pending && !errors,
+          },
+        ]"
       >
         Sign-Up
       </UButton>
@@ -56,7 +90,7 @@
 <script setup>
 import { ref, computed } from "vue";
 import { z } from "zod";
-
+let showPassword = ref(false);
 const { toastSuccess, toastError } = useAppToast();
 const supabase = useSupabaseClient();
 
@@ -75,8 +109,6 @@ const accountSchema = z.object({
     .min(1, "Full Name is required")
     .max(100, "Full name must be less than 100 characters"),
 });
-
-// const emit = defineEmits(["saved"]);
 
 const accountForm = ref({
   email: "",
@@ -127,7 +159,7 @@ async function onSubmitAccount() {
 
   pending.value = true;
   try {
-    const { data, error } = await supabase.auth.signUp({
+    const { error } = await supabase.auth.signUp({
       email: accountForm.value.email,
       password: accountForm.value.password,
       options: {
@@ -137,9 +169,6 @@ async function onSubmitAccount() {
       },
     });
     navigateTo(`/`);
-    console.log("data: ", data);
-
-    // emit("saved");
     toastSuccess({
       title: "user saved",
       description: "User added successfully",
