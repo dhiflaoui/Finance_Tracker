@@ -10,7 +10,13 @@
         :options="transactionViewOptions"
       />
     </UFormGroup>
-
+    <UFormGroup
+      label="Currency"
+      class="mb-4"
+      help="Choose the currency you would like to use"
+    >
+      <USelect v-model="state.currency" :options="currencyOptions" />
+    </UFormGroup>
     <UButton
       type="submit"
       color="black"
@@ -24,7 +30,7 @@
 
 <script setup>
 import { z } from "zod";
-import { transactionViewOptions } from "~/constants";
+import { transactionViewOptions, currencyOptions } from "~/constants";
 const supabase = useSupabaseClient();
 const user = useSupabaseUser();
 const { toastSuccess, toastError } = useAppToast();
@@ -32,6 +38,7 @@ const pending = ref(false);
 const state = ref({
   transactionView:
     user.value.user_metadata?.transaction_view ?? transactionViewOptions[1],
+  currency: user.value.user_metadata?.currency ?? "USD",
 });
 const schema = z.object({
   transactionView: z.enum(transactionViewOptions),
@@ -44,6 +51,7 @@ const saveSettings = async () => {
     const { error } = await supabase.auth.updateUser({
       data: {
         transaction_view: state.value.transactionView,
+        currency: state.value.currency,
       },
     });
     if (error) throw error;

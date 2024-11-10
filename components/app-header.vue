@@ -5,6 +5,14 @@
       <UIcon name="i-heroicons-banknotes" class="w-5 h-5" />
     </div>
     <div>
+      <UButton
+        :icon="btnIcon"
+        :color="btnColor"
+        size="sm"
+        square
+        @click="toggleMode"
+        class="dark:text-white ms-2"
+      />
       <UDropdown
         :items="items"
         :ui="{ item: { disabled: 'cursor-text select-text' }, width: 'w-64' }"
@@ -32,17 +40,7 @@
           />
         </template>
       </UDropdown>
-      <UButton
-        v-if="user"
-        :icon="btnIcon"
-        :color="btnColor"
-        size="sm"
-        square
-        variant="solid"
-        @click="toggleMode"
-        class="dark:text-white ms-2"
-      />
-      <UButton
+      <!-- <UButton
         v-else
         :icon="btnIcon"
         :color="btnColor"
@@ -50,7 +48,7 @@
         square
         @click="toggleMode"
         class="dark:text-white mr-2"
-      />
+      /> -->
     </div>
   </header>
 </template>

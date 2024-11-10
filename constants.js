@@ -8,3 +8,12 @@ export const categories = [
   "Other",
 ];
 export const types = ["Income", "Expense", "Saving", "Investment"];
+export const currencyOptions = [
+  "USD",
+  "EUR",
+  "GBP",
+  "CAD",
+  "AUD",
+  "JPY",
+  "TDN",
+];

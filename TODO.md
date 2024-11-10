@@ -2,14 +2,24 @@
 
 - [x] Add button to change between dark/light mode
 - [x] Add signUp page
-- [ ] Improve signIn and SignUp page
+- [x] Improve signIn and SignUp page
+- [x] validate the email before sending the request in signIn page
+- [ ] display user full name in the navbar
+- [x] add currency selection per user
 - [ ] change color when light mode and dark mode
-- [ ] Create alert when the user passed the configured expense limit
 - [ ] Work on the investment page
-- [ ] Implement other currency choice
 - [ ] Improve the UI of the list of Transactions grouped by date
 - [ ] add search option for transactions
 - [ ] Write tests for the application
 - [ ] Improve error handling in frontend
 - [ ] migrate the project to Nuxt 4 with TS
-- [ ] upgrade to nuxt_ui 3 or 2.18.0 to swith between auth tabs
+- [ ] upgrade to nuxt_ui 3 or 2.18.0 to switch between auth tabs
+
+## upcoming features
+
+- [ ] Add the possibility to the user to add custom categories
+- [ ] Create alert when the user passed the configured expense limit
+- [ ] add a feature to import transactions from a CSV file
+- [ ] add a feature to generate a transactions report to a PDF file
+- [ ] add advanced search options
+- [ ] add chart to show the transactions by category
