@@ -63,7 +63,7 @@ const deleteTransaction = async () => {
   } catch (error) {
     toastError({
       title: "Transaction deleted",
-      description: "error when tyring to delete transaction  ",
+      description: "error when trying to delete transaction  ",
     });
     console.log("error deleting transactions: ", error);
   } finally {

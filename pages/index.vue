@@ -59,6 +59,28 @@
       />
     </div>
   </section>
+  <section class="flex justify-end gap-2 mb-4">
+    <UFormGroup v-if="isSearchOpen" name="search" class="w-full md:w-96">
+      <UInput
+        v-model="searchQuery"
+        type="text"
+        placeholder="Search transactions..."
+        icon="i-heroicons-magnifying-glass"
+        @keyup.enter="handleSearch"
+        clearable
+      />
+    </UFormGroup>
+
+    <UButton
+      :icon="
+        isSearchOpen ? 'i-heroicons-x-mark' : 'i-heroicons-magnifying-glass'
+      "
+      color="white"
+      variant="solid"
+      :label="isSearchOpen ? 'Close' : 'Search'"
+      @click="isSearchOpen = !isSearchOpen"
+    />
+  </section>
   <section v-if="!pending">
     <div v-for="(transactionsOnDay, date) in byDate" :key="date" class="mb-10">
       <DailyTransactionSummary :date="date" :transactions="transactionsOnDay" />
@@ -86,6 +108,8 @@
 import { useSelectedTimePeriod } from "~/composables/useSelectedTimePeriod";
 import { transactionViewOptions } from "~/constants";
 const isOpen = ref(false);
+const isSearchOpen = ref(false);
+let searchQuery = ref("");
 const user = useSupabaseUser();
 const viewSelection = ref(
   user.value.user_metadata?.transaction_view ?? transactionViewOptions[1]
@@ -111,4 +135,9 @@ const {
   },
 } = useFetchTransactions(previous);
 await Promise.all([refresh(), refreshPrevious()]);
+const handleSearch = () => {
+  transactionsOnDay.value.filter((transaction) => {
+    return transaction.description.includes(searchQuery.value);
+  });
+};
 </script>

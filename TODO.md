@@ -6,6 +6,7 @@
 - [x] validate the email before sending the request in signIn page
 - [ ] display user full name in the navbar
 - [x] add currency selection per user
+- [ ] disconnect user automatically after 48 hours of inactivity
 - [ ] change color when light mode and dark mode
 - [ ] Work on the investment page
 - [ ] Improve the UI of the list of Transactions grouped by date
