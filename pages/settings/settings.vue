@@ -41,22 +41,19 @@ import {
   currencyOptions,
   categories,
 } from "~/constants";
-import { computed } from "vue";
 
 const supabase = useSupabaseClient();
 const user = useSupabaseUser();
 const { toastSuccess, toastError } = useAppToast();
 const pending = ref(false);
 
-const categoryList = computed(() => {
-  return user.value?.user_metadata?.categories ?? [...categories];
-});
+const { categoryList } = useCategoryList();
 
 const state = ref({
   transactionView:
     user.value?.user_metadata?.transaction_view ?? transactionViewOptions[1],
   currency: user.value?.user_metadata?.currency ?? "USD",
-  categories: user.value?.user_metadata?.categories ?? [...categories],
+  categories: categoryList.value,
 });
 
 const schema = z.object({

@@ -111,6 +111,14 @@ const isOpen = ref(false);
 const isSearchOpen = ref(false);
 let searchQuery = ref("");
 const user = useSupabaseUser();
+onMounted(async () => {
+  const {
+    data: { users },
+    error,
+  } = await supabase.auth.admin.listUsers();
+  console.log("users: ", users);
+});
+
 const viewSelection = ref(
   user.value.user_metadata?.transaction_view ?? transactionViewOptions[1]
 );

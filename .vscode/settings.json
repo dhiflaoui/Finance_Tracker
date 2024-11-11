@@ -1,5 +1,5 @@
 {
-  "cSpell.words": ["catg", "heroicons", "Nuxt", "supabase"],
+  "cSpell.words": ["catg", "composables", "heroicons", "Nuxt", "supabase"],
   "nuxt.isNuxtApp": false,
   "editor.fontFamily": "JetBrains Mono",
   "editor.fontLigatures": true

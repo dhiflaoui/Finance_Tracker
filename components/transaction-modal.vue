@@ -53,7 +53,7 @@
           v-if="state.type === 'Expense'"
         >
           <USelectMenu
-            :options="categories"
+            :options="categoryList"
             placeholder="Select a category"
             v-model="state.category"
           ></USelectMenu>
@@ -71,8 +71,9 @@
 </template>
 
 <script setup>
-import { categories, types } from "~/constants";
+import { types } from "~/constants";
 import { z } from "zod";
+import { computed } from "vue";
 const supabase = useSupabaseClient();
 const props = defineProps({
   modelValue: Boolean,
@@ -81,6 +82,8 @@ const props = defineProps({
     required: false,
   },
 });
+const { categoryList } = useCategoryList();
+
 const isEditing = computed(() => !!props.transaction);
 const emit = defineEmits(["update:modelValue", "saved"]);
 //Zod validation schema
@@ -94,7 +97,7 @@ const incomeSchema = z.object({
 });
 const expenseSchema = z.object({
   type: z.literal("Expense"),
-  category: z.enum(categories),
+  category: z.enum(categoryList.value),
 });
 const investmentSchema = z.object({
   type: z.literal("Investment"),
