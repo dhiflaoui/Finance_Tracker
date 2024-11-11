@@ -5,50 +5,43 @@
       <UIcon name="i-heroicons-banknotes" class="w-5 h-5" />
     </div>
     <div>
-      <UButton
-        :icon="btnIcon"
-        :color="btnColor"
-        size="sm"
-        square
-        @click="toggleMode"
-        class="dark:text-white ms-2"
-      />
-      <UDropdown
-        :items="items"
-        :ui="{ item: { disabled: 'cursor-text select-text' }, width: 'w-64' }"
-        v-if="user"
-      >
-        <UAvatar
-          :src="url ?? 'https://avatars.githubusercontent.com/u/739984?v=4'"
-          alt="Avatar"
+      <div class="flex items-center">
+        <UButton
+          :icon="btnIcon"
+          :color="btnColor"
+          size="sm"
+          square
+          @click="toggleMode"
+          class="dark:text-white ms-2 mr-2"
         />
-        <template #account="{ item }">
-          <div class="text-left">
-            <p>Signed in as</p>
-            <p class="font-medium text-gray-900 dark:text-white">
-              {{ user.email }}
-            </p>
-          </div>
-        </template>
-
-        <template #item="{ item }">
-          <span class="truncate">{{ item.label }}</span>
-
-          <UIcon
-            :name="item.icon"
-            class="flex-shrink-0 h-4 w-4 text-gray-400 dark:text-gray-500 ms-auto"
+        <UDropdown
+          :items="items"
+          :ui="{ item: { disabled: 'cursor-text select-text' }, width: 'w-64' }"
+          v-if="user"
+        >
+          <UAvatar
+            :src="url ?? 'https://avatars.githubusercontent.com/u/739984?v=4'"
+            alt="Avatar"
           />
-        </template>
-      </UDropdown>
-      <!-- <UButton
-        v-else
-        :icon="btnIcon"
-        :color="btnColor"
-        size="sm"
-        square
-        @click="toggleMode"
-        class="dark:text-white mr-2"
-      /> -->
+          <template #account="{ item }">
+            <div class="text-left">
+              <p>Signed in as</p>
+              <p class="font-medium text-gray-900 dark:text-white">
+                {{ user.user_metadata.full_name ?? user.email }}
+              </p>
+            </div>
+          </template>
+
+          <template #item="{ item }">
+            <span class="truncate">{{ item.label }}</span>
+
+            <UIcon
+              :name="item.icon"
+              class="flex-shrink-0 h-4 w-4 text-gray-400 dark:text-gray-500 ms-auto"
+            />
+          </template>
+        </UDropdown>
+      </div>
     </div>
   </header>
 </template>
