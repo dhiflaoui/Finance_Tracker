@@ -1,4 +1,6 @@
 {
-  "cSpell.words": ["heroicons", "Nuxt", "supabase"],
-  "nuxt.isNuxtApp": false
+  "cSpell.words": ["catg", "heroicons", "Nuxt", "supabase"],
+  "nuxt.isNuxtApp": false,
+  "editor.fontFamily": "JetBrains Mono",
+  "editor.fontLigatures": true
 }

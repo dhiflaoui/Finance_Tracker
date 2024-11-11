@@ -91,6 +91,7 @@
 import { ref, computed } from "vue";
 import { z } from "zod";
 let showPassword = ref(false);
+import { categories } from "~/constants";
 const { toastSuccess, toastError } = useAppToast();
 const supabase = useSupabaseClient();
 
@@ -165,6 +166,7 @@ async function onSubmitAccount() {
       options: {
         data: {
           first_name: accountForm.value.fullName,
+          categories: [...categories],
         },
       },
     });

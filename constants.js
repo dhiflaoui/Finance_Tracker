@@ -5,7 +5,6 @@ export const categories = [
   "Car",
   "Entertainment",
   "Personal staff",
-  "Other",
 ];
 export const types = ["Income", "Expense", "Saving", "Investment"];
 export const currencyOptions = [

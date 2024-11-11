@@ -17,7 +17,13 @@
     >
       <USelect v-model="state.currency" :options="currencyOptions" />
     </UFormGroup>
+
+    <CategoryInput
+      v-model:categories="state.categories"
+      :initial-categories="categoryList"
+    />
     <UButton
+      class="mt-4"
       type="submit"
       color="black"
       variant="solid"
@@ -30,34 +36,48 @@
 
 <script setup>
 import { z } from "zod";
-import { transactionViewOptions, currencyOptions } from "~/constants";
+import {
+  transactionViewOptions,
+  currencyOptions,
+  categories,
+} from "~/constants";
+import { computed } from "vue";
+
 const supabase = useSupabaseClient();
 const user = useSupabaseUser();
 const { toastSuccess, toastError } = useAppToast();
 const pending = ref(false);
+
+const categoryList = computed(() => {
+  return user.value?.user_metadata?.categories ?? [...categories];
+});
+
 const state = ref({
   transactionView:
-    user.value.user_metadata?.transaction_view ?? transactionViewOptions[1],
-  currency: user.value.user_metadata?.currency ?? "USD",
+    user.value?.user_metadata?.transaction_view ?? transactionViewOptions[1],
+  currency: user.value?.user_metadata?.currency ?? "USD",
+  categories: user.value?.user_metadata?.categories ?? [...categories],
 });
+
 const schema = z.object({
   transactionView: z.enum(transactionViewOptions),
+  currency: z.string(),
+  categories: z.array(z.string()),
 });
 
 const saveSettings = async () => {
   pending.value = true;
-
   try {
     const { error } = await supabase.auth.updateUser({
       data: {
         transaction_view: state.value.transactionView,
         currency: state.value.currency,
+        categories: state.value.categories,
       },
     });
     if (error) throw error;
-    toastSuccess({
-      title: "Settings updated",
-    });
+
+    toastSuccess({ title: "Settings updated" });
   } catch (error) {
     toastError({
       title: "Error updating settings",
