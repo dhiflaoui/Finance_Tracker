@@ -111,6 +111,7 @@ const isOpen = ref(false);
 const isSearchOpen = ref(false);
 let searchQuery = ref("");
 const user = useSupabaseUser();
+const supabase = useSupabaseClient();
 onMounted(async () => {
   const {
     data: { users },

@@ -19,8 +19,11 @@
 
 ## upcoming features
 
+- [ ] add goal section to track the progress of the goals
+- [ ] Create a landing page and change the layout of the app
 - [ ] Create alert when the user passed the configured expense limit
 - [ ] add a feature to import transactions from a CSV file
 - [ ] add a feature to generate a transactions report to a PDF file
 - [ ] add advanced search options
 - [ ] add chart to show the transactions by category
+- [ ] add verification by email when creating a new account
