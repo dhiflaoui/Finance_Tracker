@@ -8,13 +8,13 @@
 - [x] add currency selection per user
 - [x] Add the possibility to the user to add custom categories
 - [x] add search option for transactions
-- [ ] disconnect user automatically after 48 hours of inactivity
-- [ ] change color when light mode and dark mode
-- [ ] Work on the investment page
+- [x] disconnect user automatically after 48 hours of inactivity
 - [ ] Improve the UI of the list of Transactions grouped by date
+- [ ] Work on the investment page
+- [ ] migrate the project to Nuxt 4 with TS
+- [ ] change color when light mode and dark mode
 - [ ] Write tests for the application
 - [ ] Improve error handling in frontend
-- [ ] migrate the project to Nuxt 4 with TS
 - [ ] upgrade to nuxt_ui 3 or 2.18.0 to switch between auth tabs
 
 ## upcoming features
