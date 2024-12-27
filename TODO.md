@@ -9,7 +9,7 @@
 - [x] Add the possibility to the user to add custom categories
 - [x] add search option for transactions
 - [x] disconnect user automatically after 48 hours of inactivity
-- [ ] Improve the UI of the list of Transactions grouped by date
+- [ ] Improve the UI of the list of Transactions grouped by date when filter is different from daily
 - [ ] Work on the investment page
 - [ ] migrate the project to Nuxt 4 with TS
 - [ ] change color when light mode and dark mode

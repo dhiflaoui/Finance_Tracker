@@ -82,23 +82,33 @@
     />
   </section>
   <section v-if="!pending">
-    <div v-for="(transactionsOnDay, date) in byDate" :key="date" class="mb-10">
-      <DailyTransactionSummary :date="date" :transactions="transactionsOnDay" />
-      <Transaction
-        v-for="transaction in transactionsOnDay"
-        :key="transaction.id"
-        :transaction="transaction"
-        @deleteTransaction="refresh()"
-        @editTransaction="refresh()"
-      />
+    <div class="mb-6">
+      <div class="text-sm text-gray-500 dark:text-gray-400 mb-2">
+        Viewing transactions for: 
+        <span class="font-medium text-gray-900 dark:text-gray-100">
+          {{ formatTimePeriod(viewSelection, current) }}
+        </span>
+      </div>
     </div>
-    <!-- TODO :  add a stickey header for the daily summary-->
-    <!--  <div class="sticky top-0 bg-white dark:bg-gray-900 z-10">
-        <DailyTransactionSummary
-          :date="date"
-          :transactions="transactionsOnDay"
+    <div v-for="(transactionsOnDay, date) in byDate" :key="date" class="mb-6">
+      <DailyTransactionSummary 
+        :date="date" 
+        :transactions="transactionsOnDay"
+        @toggle="toggleTransactions(date)"
+      />
+      <div 
+        v-show="!collapsedGroups[date]"
+        class="pl-6 border-l-2 border-gray-100 dark:border-gray-800 ml-2"
+      >
+        <Transaction
+          v-for="transaction in transactionsOnDay"
+          :key="transaction.id"
+          :transaction="transaction"
+          @deleteTransaction="refresh()"
+          @editTransaction="refresh()"
         />
-      </div> -->
+      </div>
+    </div>
   </section>
   <section v-else>
     <USkeleton class="h-10 w-full mb-2" v-for="i in 4" :key="i" />
@@ -148,5 +158,30 @@ const handleSearch = () => {
   transactionsOnDay.value.filter((transaction) => {
     return transaction.description.includes(searchQuery.value);
   });
+};
+
+const collapsedGroups = ref({});
+
+const toggleTransactions = (date) => {
+  collapsedGroups.value[date] = !collapsedGroups.value[date];
+};
+
+const formatTimePeriod = (view, period) => {
+  const date = new Date(period);
+  switch (view) {
+    case 'Yearly':
+      return date.getFullYear();
+    case 'Monthly':
+      return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    case 'Weekly':
+      const weekStart = new Date(date);
+      const weekEnd = new Date(date);
+      weekEnd.setDate(weekEnd.getDate() + 6);
+      return `${weekStart.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${weekEnd.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+    case 'Daily':
+      return date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+    default:
+      return period;
+  }
 };
 </script>
