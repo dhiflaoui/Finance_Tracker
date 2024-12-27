@@ -9,13 +9,15 @@
 - [x] Add the possibility to the user to add custom categories
 - [x] add search option for transactions
 - [x] disconnect user automatically after 48 hours of inactivity
-- [ ] Improve the UI of the list of Transactions grouped by date when filter is different from daily
+- [x] Improve the UI of the list of Transactions grouped by date when filter is different from daily
+- [ ] fix spent value in the list of transactions
 - [ ] Work on the investment page
-- [ ] migrate the project to Nuxt 4 with TS
+- [ ] Add the ability to add a goal
 - [ ] change color when light mode and dark mode
-- [ ] Write tests for the application
 - [ ] Improve error handling in frontend
 - [ ] upgrade to nuxt_ui 3 or 2.18.0 to switch between auth tabs
+- [ ] Write tests for the application
+- [ ] migrate the project to Nuxt 4 with TS
 
 ## upcoming features
 
