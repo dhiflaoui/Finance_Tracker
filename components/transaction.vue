@@ -100,5 +100,3 @@ const iconColor = computed(() => {
   return isIncome.value ? "text-green-600" : "text-red-600";
 });
 </script>
-
-<style lang="scss" scoped></style>

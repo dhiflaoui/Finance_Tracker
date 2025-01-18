@@ -6,17 +6,29 @@
     >
       <div class="flex space-x-2 items-center">
         <UIcon
-          :name="isCollapsed ? 'i-heroicons-chevron-right' : 'i-heroicons-chevron-down'"
+          :name="
+            isCollapsed
+              ? 'i-heroicons-chevron-down'
+              : 'i-heroicons-chevron-right'
+          "
           class="w-5 h-5"
         />
         <div>
-          <span class="font-medium text-gray-900 dark:text-gray-100">{{ formattedDate }}</span>
-          <span class="text-sm ml-2">({{ transactions.length }} transactions)</span>
+          <span class="font-medium text-gray-900 dark:text-gray-100">{{
+            formattedDate
+          }}</span>
+          <span class="text-sm ml-2"
+            >({{ transactions.length }} transactions)</span
+          >
         </div>
       </div>
       <div class="flex items-center justify-end mr-10 space-x-4">
         <div class="flex flex-col items-end">
-          <span class="font-medium" :class="sum > 0 ? 'text-green-600' : 'text-red-600'">{{ currency }}</span>
+          <span
+            class="font-medium"
+            :class="sum > 0 ? 'text-green-600' : 'text-red-600'"
+            >{{ currency }}</span
+          >
           <div class="text-xs">
             <span class="text-green-600">+{{ incomeCurrency }}</span> /
             <span class="text-red-600">-{{ expenseCurrency }}</span>
@@ -24,12 +36,11 @@
         </div>
       </div>
     </div>
-    <!-- Add collapsible content here -->
   </div>
 </template>
 
 <script setup>
-const emit = defineEmits(['toggle']);
+const emit = defineEmits(["toggle"]);
 
 const props = defineProps({
   date: {
@@ -78,18 +89,18 @@ const { currency: expenseCurrency } = useCurrency(expense);
 
 const formattedDate = computed(() => {
   const date = new Date(props.date);
-  return date.toLocaleDateString('en-US', { 
-    weekday: 'long',
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric'
+  return date.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
   });
 });
 
 const isCollapsed = ref(true);
 
 watch(isCollapsed, (value) => {
-  emit('toggle');
+  emit("toggle");
 });
 </script>
 

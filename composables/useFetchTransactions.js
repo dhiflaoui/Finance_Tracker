@@ -70,7 +70,9 @@ export const useFetchTransactions = (period) => {
     return grouped;
   });
   console.log("transactGroupedByDate: ", transactGroupedByDate.value);
-
+  const savingsTotal = computed(() => {
+    return incomeTotal.value - expenseTotal.value;
+  });
   return {
     transactions: {
       all: transactions,
@@ -84,6 +86,7 @@ export const useFetchTransactions = (period) => {
       incomeCount,
       expenseCount,
     },
+    savingsTotal,
     pending,
     refresh,
   };

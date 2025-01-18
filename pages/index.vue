@@ -25,17 +25,17 @@
       :lastAmount="prevExpenseTotal"
       :loading="pending"
     />
-    <Trend
+    <!-- <Trend
       color="green"
       title="Investments"
       amount="1000"
       lastAmount="100"
       :loading="pending"
-    />
+    /> -->
     <Trend
       color="red"
       title="Savings"
-      amount="100"
+      :amount="savingsTotal"
       lastAmount="400"
       :loading="pending"
     />
@@ -84,19 +84,19 @@
   <section v-if="!pending">
     <div class="mb-6">
       <div class="text-sm text-gray-500 dark:text-gray-400 mb-2">
-        Viewing transactions for: 
         <span class="font-medium text-gray-900 dark:text-gray-100">
           {{ formatTimePeriod(viewSelection, current) }}
         </span>
       </div>
     </div>
     <div v-for="(transactionsOnDay, date) in byDate" :key="date" class="mb-6">
-      <DailyTransactionSummary 
-        :date="date" 
+      <DailyTransactionSummary
+        v-if="viewSelection !== 'Daily'"
+        :date="date"
         :transactions="transactionsOnDay"
         @toggle="toggleTransactions(date)"
       />
-      <div 
+      <div
         v-show="!collapsedGroups[date]"
         class="pl-6 border-l-2 border-gray-100 dark:border-gray-800 ml-2"
       >
@@ -125,7 +125,6 @@ const supabase = useSupabaseClient();
 onMounted(async () => {
   const {
     data: { users },
-    error,
   } = await supabase.auth.admin.listUsers();
   console.log("users: ", users);
 });
@@ -134,6 +133,7 @@ const viewSelection = ref(
   user.value.user_metadata?.transaction_view ?? transactionViewOptions[1]
 );
 const { current, previous } = useSelectedTimePeriod(viewSelection);
+console.log("current: ", current.value);
 
 const {
   pending,
@@ -145,6 +145,7 @@ const {
     expenseCount,
     grouped: { byDate },
   },
+  savingsTotal,
 } = useFetchTransactions(current);
 const {
   refresh: refreshPrevious,
@@ -168,18 +169,34 @@ const toggleTransactions = (date) => {
 
 const formatTimePeriod = (view, period) => {
   const date = new Date(period);
+  const dailyDate = new Date(period.from);
   switch (view) {
-    case 'Yearly':
+    case "Yearly":
       return date.getFullYear();
-    case 'Monthly':
-      return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-    case 'Weekly':
-      const weekStart = new Date(date);
-      const weekEnd = new Date(date);
+    case "Monthly":
+      return date.toLocaleDateString("en-US", {
+        month: "long",
+        year: "numeric",
+      });
+    case "Weekly":
+      const weekStart = new Date(period.from);
+      const weekEnd = new Date(period.to);
       weekEnd.setDate(weekEnd.getDate() + 6);
-      return `${weekStart.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${weekEnd.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
-    case 'Daily':
-      return date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+      return `${weekStart.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+      })} - ${weekEnd.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      })}`;
+    case "Daily":
+      return dailyDate.toLocaleDateString("en-US", {
+        weekday: "long",
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
     default:
       return period;
   }
