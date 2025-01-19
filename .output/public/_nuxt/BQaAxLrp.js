@@ -1,0 +1,1 @@
+const n=["Yearly","Monthly","Weekly","Daily"],t=["Food","Housing","Car","Entertainment","Personal staff"],s=["Income","Expense","Saving","Investment"],e=["USD","EUR","GBP","CAD","AUD","JPY","TDN"];export{n as a,e as b,t as c,s as t};
