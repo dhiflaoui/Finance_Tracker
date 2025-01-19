@@ -1,5 +1,5 @@
 export const useFetchTransactions = (period) => {
-  console.log("period: ", period.value);
+  // console.log("period: ", period.value);
   const supabase = useSupabaseClient();
   const transactions = ref([]);
   const pending = ref(false);
@@ -47,7 +47,7 @@ export const useFetchTransactions = (period) => {
           return data;
         }
       );
-      console.log("data.value: ", data.value);
+      // console.log("data.value: ", data.value);
       return data.value;
     } catch (error) {
       console.log("error while fetching transactions: ", error);
@@ -57,7 +57,7 @@ export const useFetchTransactions = (period) => {
   };
   const refresh = async () => (transactions.value = await fetchTransactions());
   watch(period, async () => await refresh());
-  console.log("transactions.value : ", transactions.value);
+  // console.log("transactions.value : ", transactions.value);
   const transactGroupedByDate = computed(() => {
     let grouped = {};
     for (let transaction of transactions.value) {
@@ -69,7 +69,7 @@ export const useFetchTransactions = (period) => {
     }
     return grouped;
   });
-  console.log("transactGroupedByDate: ", transactGroupedByDate.value);
+  // console.log("transactGroupedByDate: ", transactGroupedByDate.value);
   const savingsTotal = computed(() => {
     return incomeTotal.value - expenseTotal.value;
   });

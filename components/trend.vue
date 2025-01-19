@@ -28,12 +28,12 @@ const props = defineProps({
     default: "Trend",
   },
   amount: {
-    type: String,
-    default: "0",
+    type: Number,
+    default: 0,
   },
   lastAmount: {
-    type: String,
-    default: "0",
+    type: Number,
+    default: 0,
   },
   color: {
     type: String,
@@ -65,9 +65,11 @@ const percentageTrend = computed(() => {
 
 <style scoped>
 .green {
-  @apply text-green-600 dark:text-green-400;
+  color: #16a34a; /* text-green-600 */
+  color: #4ade80; /* dark:text-green-400 */
 }
 .red {
-  @apply text-red-600 dark:text-red-400;
+  color: #dc2626; /* text-red-600 */
+  color: #f87171; /* dark:text-red-400 */
 }
 </style>

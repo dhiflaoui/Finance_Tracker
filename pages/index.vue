@@ -33,10 +33,10 @@
       :loading="pending"
     /> -->
     <Trend
-      color="red"
+      color="green"
       title="Savings"
       :amount="savingsTotal"
-      lastAmount="400"
+      :lastAmount="0"
       :loading="pending"
     />
   </section>
@@ -126,14 +126,13 @@ onMounted(async () => {
   const {
     data: { users },
   } = await supabase.auth.admin.listUsers();
-  console.log("users: ", users);
+  // console.log("users: ", users);
 });
 
 const viewSelection = ref(
   user.value.user_metadata?.transaction_view ?? transactionViewOptions[1]
 );
 const { current, previous } = useSelectedTimePeriod(viewSelection);
-console.log("current: ", current.value);
 
 const {
   pending,
@@ -168,17 +167,16 @@ const toggleTransactions = (date) => {
 };
 
 const formatTimePeriod = (view, period) => {
-  const date = new Date(period);
   const dailyDate = new Date(period.from);
   switch (view) {
     case "Yearly":
-      return date.getFullYear();
+      return period.from.getFullYear();
     case "Monthly":
-      return date.toLocaleDateString("en-US", {
+      return period.from.toLocaleDateString("en-US", {
         month: "long",
         year: "numeric",
       });
-    case "Weekly":
+    case "Weekly": {
       const weekStart = new Date(period.from);
       const weekEnd = new Date(period.to);
       weekEnd.setDate(weekEnd.getDate() + 6);
@@ -190,6 +188,7 @@ const formatTimePeriod = (view, period) => {
         day: "numeric",
         year: "numeric",
       })}`;
+    }
     case "Daily":
       return dailyDate.toLocaleDateString("en-US", {
         weekday: "long",
