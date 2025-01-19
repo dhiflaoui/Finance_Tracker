@@ -1,0 +1,3 @@
+[build]
+  command = "npm run build" # or "npm run generate" for Nuxt 2
+  publish = ".output/public" # use "dist" for Nuxt 2
