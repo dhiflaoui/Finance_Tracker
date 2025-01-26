@@ -57,7 +57,7 @@ export const useFetchTransactions = (period) => {
   };
   const refresh = async () => (transactions.value = await fetchTransactions());
   watch(period, async () => await refresh());
-  // console.log("transactions.value : ", transactions.value);
+
   const transactGroupedByDate = computed(() => {
     let grouped = {};
     for (let transaction of transactions.value) {
@@ -69,9 +69,13 @@ export const useFetchTransactions = (period) => {
     }
     return grouped;
   });
-  // console.log("transactGroupedByDate: ", transactGroupedByDate.value);
   const savingsTotal = computed(() => {
     return incomeTotal.value - expenseTotal.value;
+  });
+  const investmentsTotal = computed(() => {
+    return transactions.value
+      .filter((transaction) => transaction.type === "Investment")
+      .reduce((sum, transaction) => sum + transaction.amount, 0);
   });
   return {
     transactions: {
@@ -87,6 +91,7 @@ export const useFetchTransactions = (period) => {
       expenseCount,
     },
     savingsTotal,
+    investmentsTotal,
     pending,
     refresh,
   };

@@ -13,9 +13,10 @@
           class="w-6 h-6"
           :class="{ green: trendingUp, red: !trendingUp }"
         />
-        <span class="text-gray-500 dark:text-gray-400">
+        <!-- TODO: fix this  -->
+        <!-- <span class="text-gray-500 dark:text-gray-400">
           {{ percentageTrend }} vs last period
-        </span>
+        </span> -->
       </div>
     </div>
   </div>

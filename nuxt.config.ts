@@ -7,9 +7,9 @@ export default defineNuxtConfig({
     redirect: true,
     cookieOptions: {
       maxAge: 172800, // 48 hours in seconds
-      sameSite: 'lax',
-      secure: true
-    }
+      sameSite: "lax",
+      secure: true,
+    },
   },
   colorMode: {
     preference: "system", // Default mode ('light', 'dark', or 'system')
@@ -20,5 +20,13 @@ export default defineNuxtConfig({
     public: {
       baseUrl: process.env.BASE_URL ?? "http://localhost:3000",
     },
+  },
+  nitro: {
+    prerender: {
+      crawlLinks: true,
+    },
+  },
+  experimental: {
+    payloadExtraction: false,
   },
 });

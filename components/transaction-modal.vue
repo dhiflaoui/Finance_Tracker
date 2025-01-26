@@ -25,15 +25,10 @@
             v-model.number="state.amount"
           />
         </UFormGroup>
-        <UFormGroup
-          label="Transaction date"
-          :required="true"
-          name="created_at"
-          class="mb-4"
-        >
+        <UFormGroup label="Transaction date" name="created_at" class="mb-4">
           <UInput
             type="date"
-            icon="i-heroicons-calendar-days-20-solid"
+            :icon="'i-heroicons-calendar-days-20-solid'"
             v-model="state.created_at"
           />
         </UFormGroup>
@@ -88,7 +83,7 @@ const isEditing = computed(() => !!props.transaction);
 const emit = defineEmits(["update:modelValue", "saved"]);
 //Zod validation schema
 const defaultSchema = z.object({
-  created_at: z.string(),
+  created_at: z.string().optional(),
   description: z.string().optional(),
   amount: z.number().positive("Amount needs to be more than 0"),
 });
@@ -132,7 +127,7 @@ const initialState = isEditing.value
   : {
       type: undefined,
       amount: 0,
-      created_at: undefined,
+      created_at: new Date().toISOString().substr(0, 10),
       description: undefined,
       category: undefined,
     };

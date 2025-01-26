@@ -10,6 +10,7 @@
 - [x] add search option for transactions
 - [x] disconnect user automatically after 48 hours of inactivity
 - [x] Improve the UI of the list of Transactions grouped by date when filter is different from daily
+- [ ] problem when change from weekly or monthly to daily
 - [ ] fix spent value in the list of transactions
 - [ ] Work on the investment page
 - [ ] Add the ability to add a goal

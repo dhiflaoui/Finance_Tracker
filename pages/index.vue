@@ -25,13 +25,13 @@
       :lastAmount="prevExpenseTotal"
       :loading="pending"
     />
-    <!-- <Trend
+    <Trend
       color="green"
       title="Investments"
-      amount="1000"
-      lastAmount="100"
+      :amount="investmentsTotal"
+      :lastAmount="0"
       :loading="pending"
-    /> -->
+    />
     <Trend
       color="green"
       title="Savings"
@@ -145,7 +145,9 @@ const {
     grouped: { byDate },
   },
   savingsTotal,
+  investmentsTotal,
 } = useFetchTransactions(current);
+console.log("byDate: ", byDate);
 const {
   refresh: refreshPrevious,
   transactions: {
