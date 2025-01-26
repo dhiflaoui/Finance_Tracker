@@ -1,0 +1,1 @@
+import{c as r}from"./BQaAxLrp.js";import{h as a,l as o}from"./Df1knQT9.js";const m=()=>{const s=a();return{categoryList:o(()=>{var e,t;return((t=(e=s.value)==null?void 0:e.user_metadata)==null?void 0:t.categories)??[...r]})}};export{m as u};
