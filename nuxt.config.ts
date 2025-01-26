@@ -7,9 +7,9 @@ export default defineNuxtConfig({
     redirect: true,
     cookieOptions: {
       maxAge: 172800, // 48 hours in seconds
-      sameSite: 'lax',
-      secure: true
-    }
+      sameSite: "lax",
+      secure: true,
+    },
   },
   colorMode: {
     preference: "system", // Default mode ('light', 'dark', or 'system')
