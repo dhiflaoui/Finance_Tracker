@@ -11,13 +11,12 @@
   },
   "dependencies": {
     "@nuxtjs/supabase": "^1.4.1",
+    "@nuxthq/ui": "^2.7.0",
     "nuxt": "^3.13.0",
     "vue": "latest",
     "vue-router": "latest"
   },
   "devDependencies": {
-    "@nuxt/types": "^2.18.1",
-    "@nuxthq/ui": "^2.7.0",
     "date-fns": "^4.1.0",
     "zod": "^3.23.8"
   }
