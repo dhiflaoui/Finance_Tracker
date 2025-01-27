@@ -126,7 +126,7 @@ onMounted(async () => {
   const {
     data: { users },
   } = await supabase.auth.admin.listUsers();
-  // console.log("users: ", users);
+  console.log("users: ", users);
 });
 
 const viewSelection = ref(
@@ -147,7 +147,6 @@ const {
   savingsTotal,
   investmentsTotal,
 } = useFetchTransactions(current);
-console.log("byDate: ", byDate);
 const {
   refresh: refreshPrevious,
   transactions: {
