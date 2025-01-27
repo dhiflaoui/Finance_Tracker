@@ -131,4 +131,4 @@ dist
 .pnp.*
 
 # parcel-bundler v2 cache (https://parceljs.org/)
-.output
+output/
