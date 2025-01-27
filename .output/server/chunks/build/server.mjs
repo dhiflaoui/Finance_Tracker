@@ -747,7 +747,7 @@ const _routes = [
     name: "login",
     path: "/login",
     meta: __nuxt_page_meta || {},
-    component: () => import('./login-2OAhgT8t.mjs')
+    component: () => import('./login-C4-CugHO.mjs')
   },
   {
     name: "settings",

@@ -520,7 +520,8 @@ const _sfc_main$2 = {
     const pending = ref(false);
     useSupabaseClient();
     useAppToast();
-    useRuntimeConfig().public.baseUrl;
+    const redirectUrl = useRuntimeConfig().public.baseUrl;
+    console.log("**************redirectUrl*****************: ", redirectUrl);
     const emailSchema = z.string().email("Please enter a valid email address");
     const errors = ref("");
     const validateField = () => {
@@ -1171,4 +1172,4 @@ _sfc_main.setup = (props, ctx) => {
 };
 
 export { _sfc_main as default };
-//# sourceMappingURL=login-2OAhgT8t.mjs.map
+//# sourceMappingURL=login-C4-CugHO.mjs.map
