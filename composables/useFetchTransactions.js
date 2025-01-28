@@ -1,4 +1,4 @@
-export const useFetchTransactions = (period) => {
+export const useFetchTransactions = (period, currentUserID) => {
   // console.log("period: ", period.value);
   const supabase = useSupabaseClient();
   const transactions = ref([]);
@@ -41,6 +41,7 @@ export const useFetchTransactions = (period) => {
             .select()
             .gte("created_at", period.value.from.toISOString())
             .lte("created_at", period.value.to.toISOString())
+            .eq("user_id", currentUserID)
             .order("created_at", { ascending: false });
           if (error) return [];
 
