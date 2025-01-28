@@ -719,6 +719,9 @@ async function getRouteRules(url) {
     return defu({}, ..._routeRulesMatcher.matchAll(url).reverse());
   }
 }
+const __nuxt_page_meta$1 = {
+  layout: "empty"
+};
 const __nuxt_page_meta = {
   middleware: "auth"
 };
@@ -736,38 +739,39 @@ const _routes = [
   {
     name: "confirm",
     path: "/confirm",
-    component: () => import('./confirm-DBnqzE0s.mjs')
+    meta: __nuxt_page_meta$1 || {},
+    component: () => import('./confirm-DSevv6Lj.mjs')
   },
   {
     name: "index",
     path: "/",
-    component: () => import('./index-BqdxshrM.mjs')
+    component: () => import('./index-BGJoTK8W.mjs')
   },
   {
     name: "login",
     path: "/login",
     meta: __nuxt_page_meta || {},
-    component: () => import('./login-C4-CugHO.mjs')
+    component: () => import('./login-u7zQYiUG.mjs')
   },
   {
     name: "settings",
     path: "/settings",
-    component: () => import('./settings-BljWAQKB.mjs'),
+    component: () => import('./settings-Cf9pLU8G.mjs'),
     children: [
       {
         name: "settings-avatar",
         path: "avatar",
-        component: () => import('./avatar-BNFTCL-e.mjs')
+        component: () => import('./avatar-Mo-X0qtU.mjs')
       },
       {
         name: "settings-profile",
         path: "profile",
-        component: () => import('./profile-DkiwZWRL.mjs')
+        component: () => import('./profile-CTJ3UhD2.mjs')
       },
       {
         name: "settings-settings",
         path: "settings",
-        component: () => import('./settings-k1pIKMQV.mjs')
+        component: () => import('./settings-CigtlYs7.mjs')
       }
     ]
   }
@@ -894,7 +898,7 @@ const globalMiddleware = [
   manifest_45route_45rule
 ];
 const namedMiddleware = {
-  auth: () => import('./auth-DN-rkltc.mjs')
+  auth: () => import('./auth-sVSvA_SB.mjs')
 };
 const plugin = /* @__PURE__ */ defineNuxtPlugin({
   name: "nuxt:router",
@@ -2531,7 +2535,7 @@ const plugins = [
   prerender_server_LXx1wM9sKF
 ];
 const layouts = {
-  default: () => import('./default-BrxsESPa.mjs')
+  default: () => import('./default-C-dc2_7N.mjs')
 };
 const LayoutLoader = defineComponent({
   name: "LayoutLoader",
@@ -4004,5 +4008,5 @@ let entry;
 }
 const entry$1 = (ssrContext) => entry(ssrContext);
 
-export { _export_sfc as _, __nuxt_component_0$2 as a, __nuxt_component_1 as b, __nuxt_component_4 as c, appConfig as d, entry$1 as default, useAppConfig as e, classNames as f, __nuxt_component_2$1 as g, useNuxtApp as h, asyncDataDefaults as i, createError as j, useRuntimeConfig as k, __nuxt_component_0$1 as l, __nuxt_component_1$1 as m, navigateTo as n, getSlotsChildren as o, useToast as p, defineNuxtRouteMiddleware as q, useState as r, useHead as s, useSupabaseUser as u };
+export { _export_sfc as _, __nuxt_component_0$2 as a, __nuxt_component_0$3 as b, __nuxt_component_1 as c, __nuxt_component_4 as d, entry$1 as default, appConfig as e, useAppConfig as f, classNames as g, __nuxt_component_2$1 as h, useNuxtApp as i, asyncDataDefaults as j, createError as k, useRuntimeConfig as l, __nuxt_component_0$1 as m, navigateTo as n, __nuxt_component_1$1 as o, getSlotsChildren as p, useToast as q, defineNuxtRouteMiddleware as r, useState as s, useHead as t, useSupabaseUser as u };
 //# sourceMappingURL=server.mjs.map

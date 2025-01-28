@@ -2,9 +2,24 @@
   <UModal v-model="isOpen">
     <UCard>
       <template #header>
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="modal-header">
           <span>{{ isEditing ? "Edit Transaction" : "Add Transaction" }}</span>
-          <UButton icon="i-heroicons-x-mark-20-solid" @click="isOpen = false" />
+          <UButton
+            icon="i-heroicons-x-mark-20-solid"
+            @click="isOpen = false"
+            class="close-button"
+            color="gray"
+            variant="ghost"
+            :ui="{
+              padding: 'p-1',
+              rounded: 'rounded-full',
+              color: {
+                gray: {
+                  ghost: 'hover:bg-gray-100 text-gray-500 hover:text-gray-700',
+                },
+              },
+            }"
+          />
         </div>
       </template>
       <UForm :state="state" ref="form" @submit.prevent="save" :schema="schema">
@@ -182,3 +197,25 @@ const save = async () => {
   }
 };
 </script>
+<style scoped>
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.modal-title {
+  font-weight: 500;
+  font-size: 1.125rem;
+  color: #1f2937;
+}
+
+.close-button {
+  transition: all 0.2s ease;
+}
+
+.close-button:hover {
+  transform: scale(1.05);
+}
+</style>
