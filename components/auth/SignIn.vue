@@ -106,6 +106,9 @@ const handleLogin = async () => {
     }
   } catch (error) {
     console.error("Error authenticating:", error);
+    email.value = "";
+    errors.value = "";
+    success.value = false;
   } finally {
     pending.value = false;
   }

@@ -72,6 +72,7 @@
 import { types } from "~/constants";
 import { z } from "zod";
 import { computed } from "vue";
+const user = useSupabaseUser();
 const supabase = useSupabaseClient();
 const props = defineProps({
   modelValue: Boolean,
@@ -158,10 +159,11 @@ const save = async () => {
     if (error) {
       toastError({
         title: "Transaction not saved",
-        description: `Error while saving transaction ${error}`,
+        description: `Error while saving transaction `,
       });
+      console.error("error while saving transaction: ", error);
     }
-    console.log("result: ", result);
+    console.log("result after save in supabase: ", result);
     /*  throw error; */
     isOpen.value = false;
     emit("saved");
@@ -172,7 +174,7 @@ const save = async () => {
   } catch (error) {
     toastError({
       title: "Transaction not saved",
-      description: `Error while saving transaction ${error}`,
+      description: `Error while saving transaction`,
     });
     console.error("error while saving transaction: ", error);
   } finally {
