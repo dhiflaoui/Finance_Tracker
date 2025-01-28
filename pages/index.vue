@@ -123,10 +123,11 @@ let searchQuery = ref("");
 const user = useSupabaseUser();
 const supabase = useSupabaseClient();
 onMounted(async () => {
-  const {
-    data: { users },
-  } = await supabase.auth.admin.listUsers();
-  console.log("users: ", users);
+  // const {
+  //   data: { users },
+  // } = await supabase.auth.admin.listUsers();
+  // console.log("users: ", users);
+  console.log("user.value: ", user.value);
 });
 
 const viewSelection = ref(
@@ -146,7 +147,7 @@ const {
   },
   savingsTotal,
   investmentsTotal,
-} = useFetchTransactions(current);
+} = useFetchTransactions(current, userID);
 const {
   refresh: refreshPrevious,
   transactions: {

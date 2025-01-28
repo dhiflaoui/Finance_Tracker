@@ -2,7 +2,10 @@
   <UModal v-model="isOpen">
     <UCard>
       <template #header>
-        {{ isEditing ? "Edit Transaction" : "Add Transaction" }}
+        <div class="d-flex justify-content-between align-items-center">
+          <span>{{ isEditing ? "Edit Transaction" : "Add Transaction" }}</span>
+          <UButton icon="i-heroicons-x-mark-20-solid" @click="isOpen = false" />
+        </div>
       </template>
       <UForm :state="state" ref="form" @submit.prevent="save" :schema="schema">
         <UFormGroup

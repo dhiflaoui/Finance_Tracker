@@ -65,7 +65,7 @@ const pending = ref(false);
 const supabase = useSupabaseClient();
 const { toastError } = useAppToast();
 const redirectUrl = useRuntimeConfig().public.baseUrl;
-console.log("**************redirectUrl*****************: ", redirectUrl);
+console.log('"""""""""""redirectUrl""""""""""""""": ', redirectUrl);
 
 const emailSchema = z.string().email("Please enter a valid email address");
 
