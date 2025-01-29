@@ -5,7 +5,7 @@ import { CapoPlugin, getActiveHead } from 'unhead';
 import { defineHeadPlugin, composableNames } from '@unhead/shared';
 import { useRoute as useRoute$1, RouterView, createMemoryHistory, createRouter, START_LOCATION } from 'vue-router';
 import { createServerClient, parseCookieHeader } from '@supabase/ssr';
-import { ssrRenderAttrs, ssrRenderClass, ssrInterpolate, ssrRenderSlot, ssrRenderComponent, ssrRenderList, ssrRenderStyle, ssrRenderAttr, ssrRenderSuspense, ssrRenderVNode } from 'vue/server-renderer';
+import { ssrRenderAttrs, ssrRenderClass, ssrInterpolate, ssrRenderSlot, ssrRenderComponent, ssrRenderList, ssrRenderStyle, ssrRenderSuspense, ssrRenderVNode, ssrRenderAttr } from 'vue/server-renderer';
 import { isEqual } from 'lodash-es';
 import 'node:http';
 import 'node:https';
@@ -3876,53 +3876,89 @@ _sfc_main$2.setup = (props, ctx) => {
 };
 const AppComponent = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["ssrRender", _sfc_ssrRender]]);
 const _imports_0 = "" + __buildAssetsURL("404.OJfP1l8g.jpg");
+const _imports_1 = "" + __buildAssetsURL("error.Dff2z_MG.jpg");
 const _sfc_main$1 = {
   __name: "error",
   __ssrInlineRender: true,
   setup(__props) {
+    var _a, _b;
     const error = useError();
-    const handleError = () => {
+    const router = useRouter();
+    const handleReturn = () => {
       clearError({
         redirect: "/"
       });
     };
+    const handleRetry = () => {
+      clearError();
+      router.go(0);
+    };
+    useHead({
+      title: ((_a = error.value) == null ? void 0 : _a.statusCode) === 404 ? "Page Not Found" : "Error Occurred",
+      meta: [
+        {
+          name: "description",
+          content: ((_b = error.value) == null ? void 0 : _b.statusCode) === 404 ? "The page you are looking for could not be found." : "An error occurred while loading the page."
+        }
+      ]
+    });
     return (_ctx, _push, _parent, _attrs) => {
       const _component_NuxtLayout = __nuxt_component_0$3;
-      _push(ssrRenderComponent(_component_NuxtLayout, _attrs, {
+      _push(ssrRenderComponent(_component_NuxtLayout, mergeProps({ name: "empty" }, _attrs), {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
+          var _a2, _b2, _c, _d, _e, _f;
           if (_push2) {
-            _push2(`<div class="error-container" data-v-0c14c7b2${_scopeId}><div data-v-0c14c7b2${_scopeId}>`);
+            _push2(`<main class="min-h-screen bg-slate-900 flex items-center justify-center p-4"${_scopeId}><div class="max-w-lg w-full"${_scopeId}><div class="space-y-6 text-center"${_scopeId}>`);
             if (unref(error).statusCode === 404) {
-              _push2(`<!--[--><div class="error-icon" data-v-0c14c7b2${_scopeId}><img${ssrRenderAttr("src", _imports_0)} alt="Page not found" class="mx-auto" style="${ssrRenderStyle({ "display": "block", "margin": "0 auto", "width": "80%", "height": "auto" })}" data-v-0c14c7b2${_scopeId}></div><p class="error-message" data-v-0c14c7b2${_scopeId}> The page you&#39;re looking for doesn&#39;t exist. </p><!--]-->`);
+              _push2(`<!--[--><div class="relative w-4/5 mx-auto aspect-square"${_scopeId}><img${ssrRenderAttr("src", _imports_0)} alt="Page not found illustration" class="object-contain w-full h-full"${_scopeId}></div><h1 class="text-3xl font-bold text-slate-100"${_scopeId}>Page Not Found</h1><p class="text-lg text-slate-300"${_scopeId}> The page you&#39;re looking for doesn&#39;t exist or has been moved. </p><!--]-->`);
             } else {
-              _push2(`<!--[--><div class="error-icon" data-v-0c14c7b2${_scopeId}></div><h1 class="error-title" data-v-0c14c7b2${_scopeId}>Oops! Something went wrong</h1><p class="error-message" data-v-0c14c7b2${_scopeId}><strong data-v-0c14c7b2${_scopeId}>${ssrInterpolate(unref(error).message || "An unexpected error occurred.")}</strong></p><!--]-->`);
+              _push2(`<!--[--><div class="relative w-4/5 mx-auto aspect-square"${_scopeId}><img${ssrRenderAttr("src", _imports_1)} alt="Error illustration" class="object-contain w-full h-full"${_scopeId}></div><h1 class="text-3xl font-bold text-red-400"${_scopeId}>${ssrInterpolate(((_a2 = unref(error)) == null ? void 0 : _a2.statusCode) ? `Error ${unref(error).statusCode}` : "Something Went Wrong")}</h1><p class="text-lg text-slate-300"${_scopeId}>${ssrInterpolate(((_b2 = unref(error)) == null ? void 0 : _b2.message) || "An unexpected error occurred. Please try again.")}</p><!--]-->`);
             }
-            _push2(`<button class="dashboard-button" data-v-0c14c7b2${_scopeId}> Return to Dashboard </button></div></div>`);
+            _push2(`<div class="flex flex-col sm:flex-row gap-4 justify-center"${_scopeId}><button class="inline-flex items-center justify-center px-6 py-3 text-base font-medium text-white bg-teal-600 rounded-xl hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-colors"${_scopeId}> Return to Dashboard </button>`);
+            if (((_c = unref(error)) == null ? void 0 : _c.statusCode) !== 404) {
+              _push2(`<button class="inline-flex items-center justify-center px-6 py-3 text-base font-medium text-teal-600 bg-transparent border-2 border-teal-600 rounded-xl hover:bg-teal-50 hover:text-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-colors"${_scopeId}> Try Again </button>`);
+            } else {
+              _push2(`<!---->`);
+            }
+            _push2(`</div></div></div></main>`);
           } else {
             return [
-              createVNode("div", { class: "error-container" }, [
-                createVNode("div", null, [
-                  unref(error).statusCode === 404 ? (openBlock(), createBlock(Fragment, { key: 0 }, [
-                    createVNode("div", { class: "error-icon" }, [
-                      createVNode("img", {
-                        src: _imports_0,
-                        alt: "Page not found",
-                        class: "mx-auto",
-                        style: { "display": "block", "margin": "0 auto", "width": "80%", "height": "auto" }
-                      })
-                    ]),
-                    createVNode("p", { class: "error-message" }, " The page you're looking for doesn't exist. ")
-                  ], 64)) : (openBlock(), createBlock(Fragment, { key: 1 }, [
-                    createVNode("div", { class: "error-icon" }),
-                    createVNode("h1", { class: "error-title" }, "Oops! Something went wrong"),
-                    createVNode("p", { class: "error-message" }, [
-                      createVNode("strong", null, toDisplayString(unref(error).message || "An unexpected error occurred."), 1)
+              createVNode("main", { class: "min-h-screen bg-slate-900 flex items-center justify-center p-4" }, [
+                createVNode("div", { class: "max-w-lg w-full" }, [
+                  createVNode("div", { class: "space-y-6 text-center" }, [
+                    unref(error).statusCode === 404 ? (openBlock(), createBlock(Fragment, { key: 0 }, [
+                      createVNode("div", { class: "relative w-4/5 mx-auto aspect-square" }, [
+                        createVNode("img", {
+                          src: _imports_0,
+                          alt: "Page not found illustration",
+                          class: "object-contain w-full h-full"
+                        })
+                      ]),
+                      createVNode("h1", { class: "text-3xl font-bold text-slate-100" }, "Page Not Found"),
+                      createVNode("p", { class: "text-lg text-slate-300" }, " The page you're looking for doesn't exist or has been moved. ")
+                    ], 64)) : (openBlock(), createBlock(Fragment, { key: 1 }, [
+                      createVNode("div", { class: "relative w-4/5 mx-auto aspect-square" }, [
+                        createVNode("img", {
+                          src: _imports_1,
+                          alt: "Error illustration",
+                          class: "object-contain w-full h-full"
+                        })
+                      ]),
+                      createVNode("h1", { class: "text-3xl font-bold text-red-400" }, toDisplayString(((_d = unref(error)) == null ? void 0 : _d.statusCode) ? `Error ${unref(error).statusCode}` : "Something Went Wrong"), 1),
+                      createVNode("p", { class: "text-lg text-slate-300" }, toDisplayString(((_e = unref(error)) == null ? void 0 : _e.message) || "An unexpected error occurred. Please try again."), 1)
+                    ], 64)),
+                    createVNode("div", { class: "flex flex-col sm:flex-row gap-4 justify-center" }, [
+                      createVNode("button", {
+                        onClick: handleReturn,
+                        class: "inline-flex items-center justify-center px-6 py-3 text-base font-medium text-white bg-teal-600 rounded-xl hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-colors"
+                      }, " Return to Dashboard "),
+                      ((_f = unref(error)) == null ? void 0 : _f.statusCode) !== 404 ? (openBlock(), createBlock("button", {
+                        key: 0,
+                        onClick: handleRetry,
+                        class: "inline-flex items-center justify-center px-6 py-3 text-base font-medium text-teal-600 bg-transparent border-2 border-teal-600 rounded-xl hover:bg-teal-50 hover:text-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-colors"
+                      }, " Try Again ")) : createCommentVNode("", true)
                     ])
-                  ], 64)),
-                  createVNode("button", {
-                    onClick: handleError,
-                    class: "dashboard-button"
-                  }, " Return to Dashboard ")
+                  ])
                 ])
               ])
             ];
@@ -3939,7 +3975,6 @@ _sfc_main$1.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("error.vue");
   return _sfc_setup$1 ? _sfc_setup$1(props, ctx) : void 0;
 };
-const ErrorComponent = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-0c14c7b2"]]);
 const _sfc_main = {
   __name: "nuxt-root",
   __ssrInlineRender: true,
@@ -3968,7 +4003,7 @@ const _sfc_main = {
           if (unref(abortRender)) {
             _push(`<div></div>`);
           } else if (unref(error)) {
-            _push(ssrRenderComponent(unref(ErrorComponent), { error: unref(error) }, null, _parent));
+            _push(ssrRenderComponent(unref(_sfc_main$1), { error: unref(error) }, null, _parent));
           } else if (unref(islandContext)) {
             _push(ssrRenderComponent(unref(IslandRenderer), { context: unref(islandContext) }, null, _parent));
           } else if (unref(SingleRenderer)) {
