@@ -745,7 +745,7 @@ const _routes = [
   {
     name: "index",
     path: "/",
-    component: () => import('./index-BGJoTK8W.mjs')
+    component: () => import('./index-DOgmIvyF.mjs')
   },
   {
     name: "login",
@@ -2535,7 +2535,7 @@ const plugins = [
   prerender_server_LXx1wM9sKF
 ];
 const layouts = {
-  default: () => import('./default-C-dc2_7N.mjs')
+  default: () => import('./default-DH52dN_8.mjs')
 };
 const LayoutLoader = defineComponent({
   name: "LayoutLoader",

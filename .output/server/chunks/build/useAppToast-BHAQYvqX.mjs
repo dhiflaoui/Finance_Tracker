@@ -367,5 +367,5 @@ const useAppToast = () => {
   };
 };
 
-export { __nuxt_component_1$1 as _, __nuxt_component_1 as a, useAppToast as b, useFormEvents as u };
+export { __nuxt_component_1$1 as _, useAppToast as a, __nuxt_component_1 as b, useFormEvents as u };
 //# sourceMappingURL=useAppToast-BHAQYvqX.mjs.map
