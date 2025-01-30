@@ -1,4 +1,4 @@
-import { b as useAppToast, _ as __nuxt_component_1$1, a as __nuxt_component_1 } from './useAppToast-BHAQYvqX.mjs';
+import { a as useAppToast, _ as __nuxt_component_1$1, b as __nuxt_component_1 } from './useAppToast-BHAQYvqX.mjs';
 import { u as useSupabaseUser, d as __nuxt_component_4, h as __nuxt_component_2$1 } from './server.mjs';
 import { ref, withCtx, unref, createVNode, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrRenderComponent } from 'vue/server-renderer';

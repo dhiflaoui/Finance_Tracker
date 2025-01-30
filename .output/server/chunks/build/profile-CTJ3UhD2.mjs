@@ -1,5 +1,5 @@
 import { _ as __nuxt_component_0 } from './Form-Bw62B85A.mjs';
-import { b as useAppToast, _ as __nuxt_component_1$1, a as __nuxt_component_1 } from './useAppToast-BHAQYvqX.mjs';
+import { a as useAppToast, _ as __nuxt_component_1$1, b as __nuxt_component_1 } from './useAppToast-BHAQYvqX.mjs';
 import { u as useSupabaseUser, h as __nuxt_component_2$1 } from './server.mjs';
 import { ref, mergeProps, unref, withCtx, createVNode, useSSRContext } from 'vue';
 import { ssrRenderComponent } from 'vue/server-renderer';

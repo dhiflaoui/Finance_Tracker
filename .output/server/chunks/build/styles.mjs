@@ -1,9 +1,11 @@
 const interopDefault = r => r.default || r || [];
 const styles = {
-  "node_modules/nuxt/dist/app/entry.js": () => import('./entry-styles.B8tKz-W3.mjs').then(interopDefault),
+  "node_modules/nuxt/dist/app/entry.js": () => import('./entry-styles.CBmu3fLT.mjs').then(interopDefault),
   "pages/404Page.vue": () => import('./404Page-styles.-8vWgE9N.mjs').then(interopDefault),
+  "pages/index.vue": () => import('./index-styles.KGHiov7n.mjs').then(interopDefault),
   "pages/confirm.vue": () => import('./confirm-styles.iolNx6B4.mjs').then(interopDefault),
   "pages/404Page.vue?vue&type=style&index=0&scoped=4ebc1bf6&lang.css": () => import('./404Page-styles.B6wK6-bb.mjs').then(interopDefault),
+  "pages/index.vue?vue&type=style&index=0&scoped=166e011e&lang.css": () => import('./index-styles.CZxVAxyX.mjs').then(interopDefault),
   "pages/confirm.vue?vue&type=style&index=0&scoped=426f4b14&lang.css": () => import('./confirm-styles.iXPw9f0s.mjs').then(interopDefault),
   "components/trend.vue": () => import('./trend-styles.D-Xull8R.mjs').then(interopDefault),
   "components/transaction-modal.vue": () => import('./transaction-modal-styles.B7L2ZDTW.mjs').then(interopDefault),
