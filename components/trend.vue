@@ -8,11 +8,11 @@
     <div>
       <USkeleton class="h-6 w-full" v-if="loading" />
       <div v-else class="flex space-x-1 items-center text-sm">
-        <UIcon
+        <!-- <UIcon
           :name="icon"
           class="w-6 h-6"
           :class="{ green: trendingUp, red: !trendingUp }"
-        />
+        /> -->
         <!-- TODO: fix this  -->
         <!-- <span class="text-gray-500 dark:text-gray-400">
           {{ percentageTrend }} vs last period
