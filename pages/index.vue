@@ -48,26 +48,9 @@
       </section>
 
       <!-- New Chart Section -->
-      <!-- <section class="mb-10">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6"> -->
-      <!-- Income vs Expenses Chart -->
-      <!-- <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
-            <h3 class="text-lg font-semibold mb-4">Income vs Expenses</h3>
-            <div class="h-64">
-              <LineChart />
-            </div>
-          </div> -->
-
-      <!-- Category Distribution Chart -->
-      <!-- <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
-            <h3 class="text-lg font-semibold mb-4">Category Distribution</h3>
-            <div class="h-64">
-              <DoughnutChart />
-            </div>
-          </div>
-        </div>
-      </section> -->
-
+      <section class="mb-10" v-if="!pending">
+        <TransactionsCharts :TransactionPerDate="byDate" />
+      </section>
       <!-- Transaction Header -->
       <section class="flex justify-between mb-10">
         <div>
@@ -162,7 +145,6 @@ onMounted(async () => {
   //   data: { users },
   // } = await supabase.auth.admin.listUsers();
   // console.log("users: ", users);
-  console.log("user.value: ", user.value.id);
 });
 
 const viewSelection = ref(

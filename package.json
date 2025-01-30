@@ -10,12 +10,14 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@nuxtjs/supabase": "^1.4.1",
     "@nuxthq/ui": "^2.7.0",
+    "@nuxtjs/supabase": "^1.4.1",
+    "chart.js": "^4.4.7",
+    "date-fns": "^4.1.0",
     "nuxt": "^3.13.0",
     "vue": "latest",
+    "vue-chartjs": "^5.3.2",
     "vue-router": "latest",
-    "date-fns": "^4.1.0",
     "zod": "^3.23.8"
   }
 }

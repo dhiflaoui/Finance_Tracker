@@ -148,7 +148,7 @@ const initialState = isEditing.value
       amount: 0,
       created_at: new Date().toISOString().substr(0, 10),
       description: undefined,
-      category: undefined,
+      category: "other",
     };
 const state = ref({ ...initialState });
 const resetForm = () => {
