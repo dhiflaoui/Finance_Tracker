@@ -1,38 +1,34 @@
 <template>
-  <div>
-    <div
-      class="grid grid-cols-2 py-4 border-b border-gray-200 dark:border-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer"
-      @click="isCollapsed = !isCollapsed"
-    >
-      <div class="flex space-x-2 items-center">
-        <UIcon
-          :name="
-            isCollapsed
-              ? 'i-heroicons-chevron-down'
-              : 'i-heroicons-chevron-right'
-          "
-          class="w-5 h-5"
-        />
-        <div>
-          <span class="font-medium text-gray-900 dark:text-gray-100">{{
-            formattedDate
-          }}</span>
-          <span class="text-sm ml-2"
-            >({{ transactions.length }} transactions)</span
-          >
-        </div>
+  <div
+    class="grid grid-cols-2 py-4 border-b border-gray-200 dark:border-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors cursor-pointer"
+    @click="isCollapsed = !isCollapsed"
+  >
+    <div class="flex space-x-2 items-center">
+      <UIcon
+        :name="
+          isCollapsed ? 'i-heroicons-chevron-down' : 'i-heroicons-chevron-right'
+        "
+        class="w-5 h-5"
+      />
+      <div>
+        <span class="font-medium text-gray-900 dark:text-gray-100">{{
+          formattedDate
+        }}</span>
+        <span class="text-sm ml-2"
+          >({{ transactions.length }} transactions)</span
+        >
       </div>
-      <div class="flex items-center justify-end mr-10 space-x-4">
-        <div class="flex flex-col items-end">
-          <span
-            class="font-medium"
-            :class="sum > 0 ? 'text-green-600' : 'text-red-600'"
-            >{{ currency }}</span
-          >
-          <div class="text-xs">
-            <span class="text-green-600">+{{ incomeCurrency }}</span> /
-            <span class="text-red-600">-{{ expenseCurrency }}</span>
-          </div>
+    </div>
+    <div class="flex items-center justify-end mr-10 space-x-4">
+      <div class="flex flex-col items-end">
+        <span
+          class="font-medium"
+          :class="sum > 0 ? 'text-green-600' : 'text-red-600'"
+          >{{ currency }}</span
+        >
+        <div class="text-xs">
+          <span class="text-green-600">+{{ incomeCurrency }}</span> /
+          <span class="text-red-600">-{{ expenseCurrency }}</span>
         </div>
       </div>
     </div>
@@ -49,6 +45,10 @@ const props = defineProps({
   transactions: {
     type: Array,
     default: [],
+  },
+  viewSelection: {
+    type: String,
+    default: "Daily",
   },
 });
 
@@ -89,6 +89,12 @@ const { currency: expenseCurrency } = useCurrency(expense);
 
 const formattedDate = computed(() => {
   const date = new Date(props.date);
+  if (props.viewSelection === "Yearly") {
+    return date.toLocaleDateString("en-US", {
+      month: "long",
+      year: "numeric",
+    });
+  }
   return date.toLocaleDateString("en-US", {
     weekday: "long",
     month: "long",
@@ -100,6 +106,7 @@ const formattedDate = computed(() => {
 const isCollapsed = ref(true);
 
 watch(isCollapsed, (value) => {
+  console.log("isCollapsed: ", isCollapsed.value);
   emit("toggle");
 });
 </script>

@@ -10,7 +10,7 @@
         <div>{{ transaction.description }}</div>
       </div>
       <div v-if="transaction.category">
-        <UBadge color="white">{{ transaction.category }}</UBadge>
+        <UBadge color="white">{{ transaction.category }} </UBadge>
       </div>
     </div>
 

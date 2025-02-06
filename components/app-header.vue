@@ -1,12 +1,7 @@
 <template>
   <header class="flex justify-between items-center mt-10">
     <div class="flex items-center gap-2">
-      <template>
-        <div class="text-2xl font-bold">
-          <NuxtLink v-if="user" to="/">My Finance Tracker</NuxtLink>
-          <span v-else>My Finance Tracker</span>
-        </div>
-      </template>
+      <NuxtLink to="/" class="text-2xl font-bold">My Finance Tracker</NuxtLink>
 
       <UIcon name="i-heroicons-banknotes" class="w-5 h-5" />
     </div>

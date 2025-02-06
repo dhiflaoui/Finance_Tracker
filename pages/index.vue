@@ -49,7 +49,9 @@
 
       <!-- New Chart Section -->
       <section class="mb-10" v-if="!pending">
-        <TransactionsCharts :TransactionPerDate="byDate" />
+        <TransactionsCharts
+          :TransactionPerDate="viewSelection === 'Yearly' ? byMonth : byDate"
+        />
       </section>
       <!-- Transaction Header -->
       <section class="flex justify-between mb-10">
@@ -61,40 +63,42 @@
           </div>
         </div>
         <div class="flex items-center gap-4">
-          <UButton
-            :icon="
-              isSearchOpen
-                ? 'i-heroicons-x-mark'
-                : 'i-heroicons-magnifying-glass'
-            "
-            color="white"
-            variant="solid"
-            :label="isSearchOpen ? 'Close' : 'Search'"
-            @click="isSearchOpen = !isSearchOpen"
-          />
-          <TransactionModal v-model="isOpen" @saved="refresh()" />
-          <UButton
-            icon="i-heroicons-plus-circle"
-            color="white"
-            variant="solid"
-            label="Add"
-            @click="isOpen = true"
-          />
-        </div>
-      </section>
+          <div v-if="isSearchOpen" class="w-96">
+            <UFormGroup name="search">
+              <UInput
+                v-model="searchQuery"
+                type="text"
+                placeholder="Search transactions..."
+                icon="i-heroicons-magnifying-glass"
+                @keyup.enter="handleSearch"
+                clearable
+              />
+            </UFormGroup>
+          </div>
+          <div class="flex items-center gap-4">
+            <UButton
+              :icon="
+                isSearchOpen
+                  ? 'i-heroicons-x-mark'
+                  : 'i-heroicons-magnifying-glass'
+              "
+              color="white"
+              variant="solid"
+              :label="isSearchOpen ? '' : 'Search'"
+              @click="isSearchOpen = !isSearchOpen"
+            />
+            <!-- Search Section -->
 
-      <!-- Search Section -->
-      <section v-if="isSearchOpen" class="mb-4">
-        <UFormGroup name="search" class="w-full md:w-96">
-          <UInput
-            v-model="searchQuery"
-            type="text"
-            placeholder="Search transactions..."
-            icon="i-heroicons-magnifying-glass"
-            @keyup.enter="handleSearch"
-            clearable
-          />
-        </UFormGroup>
+            <TransactionModal v-model="isOpen" @saved="refresh()" />
+            <UButton
+              icon="i-heroicons-plus-circle"
+              color="white"
+              variant="solid"
+              label="Add"
+              @click="isOpen = true"
+            />
+          </div>
+        </div>
       </section>
     </div>
 
@@ -102,18 +106,21 @@
     <div class="flex-1 overflow-y-auto">
       <section v-if="!pending">
         <div
-          v-for="(transactionsOnDay, date) in byDate"
-          :key="date"
+          v-for="(transactionsOnDay, period) in viewSelection === 'Yearly'
+            ? byMonth
+            : byDate"
+          :key="period"
           class="mb-6"
         >
           <DailyTransactionSummary
             v-if="viewSelection !== 'Daily'"
-            :date="date"
+            :date="period"
             :transactions="transactionsOnDay"
-            @toggle="toggleTransactions(date)"
+            @toggle="toggleTransactions(period)"
+            :viewSelection="viewSelection"
           />
           <div
-            v-show="!collapsedGroups[date]"
+            v-show="!collapsedGroups[period]"
             class="pl-6 border-l-2 border-gray-100 dark:border-gray-800 ml-2"
           >
             <Transaction
@@ -219,6 +226,21 @@ const formatTimePeriod = (view, period) => {
       return period;
   }
 };
+const byMonth = computed(() => {
+  if (!byDate.value) return {};
+
+  return Object.entries(byDate.value).reduce((acc, [date, transactions]) => {
+    // Create month key in format "YYYY-MM"
+    const monthKey = date.substring(0, 7);
+
+    if (!acc[monthKey]) {
+      acc[monthKey] = [];
+    }
+
+    acc[monthKey].push(...transactions);
+    return acc;
+  }, {});
+});
 </script>
 <style scoped>
 .h-screen {
