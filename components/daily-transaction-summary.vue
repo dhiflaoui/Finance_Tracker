@@ -106,7 +106,6 @@ const formattedDate = computed(() => {
 const isCollapsed = ref(true);
 
 watch(isCollapsed, (value) => {
-  console.log("isCollapsed: ", isCollapsed.value);
   emit("toggle");
 });
 </script>

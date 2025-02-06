@@ -6,8 +6,35 @@
       class="flex space-x-2 items-center justify-between space-x-4 col-span-2"
     >
       <div class="flex items-center space-x-1">
-        <UIcon :name="icon" :class="[iconColor]" />
+        <UIcon
+          :name="
+            transaction.type === 'Income'
+              ? 'i-heroicons-arrow-up'
+              : transaction.type === 'Expense'
+              ? 'i-heroicons-arrow-down'
+              : transaction.type === 'Saving'
+              ? 'i-heroicons-banknotes'
+              : transaction.type === 'Investment'
+              ? 'i-heroicons-chart-pie'
+              : 'i-heroicons-question-mark-circle'
+          "
+          :class="[
+            transaction.type === 'Income'
+              ? 'text-green-500'
+              : transaction.type === 'Expense'
+              ? 'text-red-500'
+              : transaction.type === 'Saving'
+              ? 'text-blue-500'
+              : transaction.type === 'Investment'
+              ? 'text-purple-500'
+              : 'text-gray-500',
+          ]"
+          :title="transaction.type"
+        />
         <div>{{ transaction.description }}</div>
+      </div>
+      <div v-if="viewSelection === 'Yearly'">
+        <UBadge color="white">{{ dayDate }} </UBadge>
       </div>
       <div v-if="transaction.category">
         <UBadge color="white">{{ transaction.category }} </UBadge>
@@ -43,6 +70,16 @@ const props = defineProps({
     type: Object,
     default: {},
   },
+  viewSelection: {
+    type: String,
+    default: "Daily",
+  },
+});
+const dayDate = computed(() => {
+  return new Date(props.transaction.created_at).toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+  });
 });
 const emit = defineEmits(["deleteTransaction", "editTransaction"]);
 const { currency } = useCurrency(props.transaction.amount);

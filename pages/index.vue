@@ -1,114 +1,116 @@
 <template>
   <div class="flex flex-col h-screen">
-    <!-- Fixed Header Section -->
-    <div class="flex-none">
-      <!-- Summary Header -->
-      <section class="flex items-center justify-between mb-10">
-        <h1 class="text-xl font-extrabold">Summary</h1>
-        <div>
-          <USelectMenu
-            :options="transactionViewOptions"
-            v-model="viewSelection"
-          ></USelectMenu>
+    <!-- Previous header sections remain unchanged -->
+    <section class="flex items-center justify-between mb-10">
+      <h1 class="text-xl font-extrabold">Summary</h1>
+      <div>
+        <USelectMenu
+          :options="transactionViewOptions"
+          v-model="viewSelection"
+        ></USelectMenu>
+      </div>
+    </section>
+
+    <!-- Summary Cards -->
+    <section
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 sm:gap-16 mb-10"
+    >
+      <Trend
+        color="green"
+        title="Total Income"
+        :amount="incomeTotal"
+        :lastAmount="prevIncomeTotal"
+        :loading="pending"
+      />
+      <Trend
+        color="red"
+        title="Expenses"
+        :amount="expenseTotal"
+        :lastAmount="prevExpenseTotal"
+        :loading="pending"
+      />
+      <Trend
+        color="green"
+        title="Investments"
+        :amount="investmentsTotal"
+        :lastAmount="0"
+        :loading="pending"
+      />
+      <Trend
+        color="green"
+        title="Savings"
+        :amount="savingsTotal"
+        :lastAmount="0"
+        :loading="pending"
+      />
+    </section>
+    <!-- New Chart Section -->
+    <section class="mb-10" v-if="!pending">
+      <TransactionsCharts
+        :TransactionPerDate="viewSelection === 'Yearly' ? byMonth : byDate"
+      />
+    </section>
+    <!-- Transaction Header with Search -->
+    <section class="flex justify-between mb-10">
+      <div>
+        <h2 class="text-2xl font-extrabold">Transaction</h2>
+        <div class="text-gray-500 dark:text-gray-400">
+          You have {{ filteredStats.incomeCount }} incomes and
+          {{ filteredStats.expenseCount }} expenses this period.
         </div>
-      </section>
+      </div>
 
-      <!-- Summary Cards -->
-      <section
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 sm:gap-16 mb-10"
-      >
-        <Trend
-          color="green"
-          title="Total Income"
-          :amount="incomeTotal"
-          :lastAmount="prevIncomeTotal"
-          :loading="pending"
-        />
-        <Trend
-          color="red"
-          title="Expenses"
-          :amount="expenseTotal"
-          :lastAmount="prevExpenseTotal"
-          :loading="pending"
-        />
-        <Trend
-          color="green"
-          title="Investments"
-          :amount="investmentsTotal"
-          :lastAmount="0"
-          :loading="pending"
-        />
-        <Trend
-          color="green"
-          title="Savings"
-          :amount="savingsTotal"
-          :lastAmount="0"
-          :loading="pending"
-        />
-      </section>
-
-      <!-- New Chart Section -->
-      <section class="mb-10" v-if="!pending">
-        <TransactionsCharts
-          :TransactionPerDate="viewSelection === 'Yearly' ? byMonth : byDate"
-        />
-      </section>
-      <!-- Transaction Header -->
-      <section class="flex justify-between mb-10">
-        <div>
-          <h2 class="text-2xl font-extrabold">Transaction</h2>
-          <div class="text-gray-500 dark:text-gray-400">
-            You have {{ incomeCount }} incomes and {{ expenseCount }} expenses
-            this period.
-          </div>
-        </div>
-        <div class="flex items-center gap-4">
-          <div v-if="isSearchOpen" class="w-96">
-            <UFormGroup name="search">
-              <UInput
-                v-model="searchQuery"
-                type="text"
-                placeholder="Search transactions..."
-                icon="i-heroicons-magnifying-glass"
-                @keyup.enter="handleSearch"
-                clearable
-              />
-            </UFormGroup>
-          </div>
-          <div class="flex items-center gap-4">
-            <UButton
-              :icon="
-                isSearchOpen
-                  ? 'i-heroicons-x-mark'
-                  : 'i-heroicons-magnifying-glass'
-              "
-              color="white"
-              variant="solid"
-              :label="isSearchOpen ? '' : 'Search'"
-              @click="isSearchOpen = !isSearchOpen"
-            />
-            <!-- Search Section -->
-
-            <TransactionModal v-model="isOpen" @saved="refresh()" />
-            <UButton
-              icon="i-heroicons-plus-circle"
-              color="white"
-              variant="solid"
-              label="Add"
-              @click="isOpen = true"
+      <div class="flex items-center gap-4">
+        <!-- Search Input with Nuxt Transition -->
+        <transition
+          enter-active-class="transition duration-200 ease-out"
+          enter-from-class="transform scale-95 opacity-0"
+          enter-to-class="transform scale-100 opacity-100"
+          leave-active-class="transition duration-200 ease-in"
+          leave-from-class="transform scale-100 opacity-100"
+          leave-to-class="transform scale-95 opacity-0"
+        >
+          <div v-show="isSearchOpen" class="w-60">
+            <UInput
+              v-model="searchQuery"
+              type="text"
+              placeholder="Search transactions..."
+              icon="i-heroicons-magnifying-glass"
+              clearable
+              @keyup.escape="closeSearch"
+              @clear="clearSearch"
             />
           </div>
-        </div>
-      </section>
-    </div>
+        </transition>
+
+        <!-- Search Toggle Button -->
+        <UButton
+          :icon="
+            isSearchOpen ? 'i-heroicons-x-mark' : 'i-heroicons-magnifying-glass'
+          "
+          color="white"
+          variant="solid"
+          :label="isSearchOpen ? '' : 'Search'"
+          @click="toggleSearch"
+        />
+
+        <!-- Add Transaction Button -->
+        <TransactionModal v-model="isOpen" @saved="refresh()" />
+        <UButton
+          icon="i-heroicons-plus-circle"
+          color="white"
+          variant="solid"
+          label="Add"
+          @click="isOpen = true"
+        />
+      </div>
+    </section>
 
     <!-- Scrollable Transactions Section -->
     <div class="flex-1 overflow-y-auto">
       <section v-if="!pending">
         <div
-          v-for="(transactionsOnDay, period) in viewSelection === 'Yearly'
-            ? byMonth
-            : byDate"
+          v-for="(transactionsOnDay, period) in filteredTransactions"
           :key="period"
           class="mb-6"
         >
@@ -129,6 +131,7 @@
               :transaction="transaction"
               @deleteTransaction="refresh()"
               @editTransaction="refresh()"
+              :viewSelection="viewSelection"
             />
           </div>
         </div>
@@ -139,26 +142,24 @@
     </div>
   </div>
 </template>
+
 <script setup>
 import { useSelectedTimePeriod } from "~/composables/useSelectedTimePeriod";
 import { transactionViewOptions } from "~/constants";
 const isOpen = ref(false);
 const isSearchOpen = ref(false);
-let searchQuery = ref("");
-const user = useSupabaseUser();
-const supabase = useSupabaseClient();
-onMounted(async () => {
-  // const {
-  //   data: { users },
-  // } = await supabase.auth.admin.listUsers();
-  // console.log("users: ", users);
-});
+const searchQuery = ref("");
+const collapsedGroups = ref({});
 
+const user = useSupabaseUser();
 const viewSelection = ref(
   user.value.user_metadata?.transaction_view ?? transactionViewOptions[1]
 );
+
+// Time Period Management
 const { current, previous } = useSelectedTimePeriod(viewSelection);
 
+// Fetch Transactions
 const {
   pending,
   refresh,
@@ -172,6 +173,7 @@ const {
   savingsTotal,
   investmentsTotal,
 } = useFetchTransactions(current, user.value.id);
+
 const {
   refresh: refreshPrevious,
   transactions: {
@@ -179,69 +181,94 @@ const {
     expenseTotal: prevExpenseTotal,
   },
 } = useFetchTransactions(previous, user.value.id);
+
+// Initial Data Load
 await Promise.all([refresh(), refreshPrevious()]);
-const handleSearch = () => {
-  transactionsOnDay.value.filter((transaction) => {
-    return transaction.description.includes(searchQuery.value);
-  });
+
+// Search Functionality
+const toggleSearch = () => {
+  isSearchOpen.value = !isSearchOpen.value;
+  if (!isSearchOpen.value) {
+    clearSearch();
+  }
 };
 
-const collapsedGroups = ref({});
+const closeSearch = () => {
+  isSearchOpen.value = false;
+  clearSearch();
+};
 
+const clearSearch = () => {
+  searchQuery.value = "";
+};
+
+// Filtered Transactions
+const filteredTransactions = computed(() => {
+  const transactions =
+    viewSelection.value === "Yearly" ? byMonth.value : byDate.value;
+  if (!searchQuery.value || !transactions) return transactions;
+
+  const query = searchQuery.value.toLowerCase().trim();
+  const filtered = {};
+
+  Object.entries(transactions).forEach(([date, transactionList]) => {
+    const matchingTransactions = transactionList.filter(
+      (transaction) =>
+        transaction.description?.toLowerCase().includes(query) ||
+        transaction.category?.toLowerCase().includes(query) ||
+        transaction.amount?.toString().includes(query)
+    );
+
+    if (matchingTransactions.length > 0) {
+      filtered[date] = matchingTransactions;
+    }
+  });
+
+  return filtered;
+});
+
+// Filtered Statistics
+const filteredStats = computed(() => {
+  let incomeCount = 0;
+  let expenseCount = 0;
+
+  if (!filteredTransactions.value) return { incomeCount, expenseCount };
+
+  Object.values(filteredTransactions.value).forEach((transactions) => {
+    transactions.forEach((transaction) => {
+      if (transaction.type === "Income") incomeCount++;
+      if (transaction.type === "Expense") expenseCount++;
+    });
+  });
+
+  return { incomeCount, expenseCount };
+});
+
+// Group Management
 const toggleTransactions = (date) => {
   collapsedGroups.value[date] = !collapsedGroups.value[date];
 };
 
-const formatTimePeriod = (view, period) => {
-  const dailyDate = new Date(period.from);
-  switch (view) {
-    case "Yearly":
-      return period.from.getFullYear();
-    case "Monthly":
-      return period.from.toLocaleDateString("en-US", {
-        month: "long",
-        year: "numeric",
-      });
-    case "Weekly": {
-      const weekStart = new Date(period.from);
-      const weekEnd = new Date(period.to);
-      weekEnd.setDate(weekEnd.getDate() + 6);
-      return `${weekStart.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-      })} - ${weekEnd.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-      })}`;
-    }
-    case "Daily":
-      return dailyDate.toLocaleDateString("en-US", {
-        weekday: "long",
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-      });
-    default:
-      return period;
-  }
-};
+// Monthly Grouping
 const byMonth = computed(() => {
   if (!byDate.value) return {};
 
   return Object.entries(byDate.value).reduce((acc, [date, transactions]) => {
-    // Create month key in format "YYYY-MM"
     const monthKey = date.substring(0, 7);
-
     if (!acc[monthKey]) {
       acc[monthKey] = [];
     }
-
     acc[monthKey].push(...transactions);
     return acc;
   }, {});
 });
+
+// Clear search when view changes
+watch(viewSelection, () => {
+  clearSearch();
+});
 </script>
+
 <style scoped>
 .h-screen {
   height: 100vh;
