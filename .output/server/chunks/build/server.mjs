@@ -745,13 +745,13 @@ const _routes = [
   {
     name: "index",
     path: "/",
-    component: () => import('./index-DQyeGkNi.mjs')
+    component: () => import('./index-DPSAqKGc.mjs')
   },
   {
     name: "login",
     path: "/login",
     meta: __nuxt_page_meta || {},
-    component: () => import('./login-u7zQYiUG.mjs')
+    component: () => import('./login-vtj8eFvA.mjs')
   },
   {
     name: "settings",
@@ -761,17 +761,17 @@ const _routes = [
       {
         name: "settings-avatar",
         path: "avatar",
-        component: () => import('./avatar-Mo-X0qtU.mjs')
+        component: () => import('./avatar-V2LOM6Sn.mjs')
       },
       {
         name: "settings-profile",
         path: "profile",
-        component: () => import('./profile-CTJ3UhD2.mjs')
+        component: () => import('./profile-zVB4cXzo.mjs')
       },
       {
         name: "settings-settings",
         path: "settings",
-        component: () => import('./settings-CigtlYs7.mjs')
+        component: () => import('./settings-B2l1EApn.mjs')
       }
     ]
   }
@@ -2535,7 +2535,7 @@ const plugins = [
   prerender_server_LXx1wM9sKF
 ];
 const layouts = {
-  default: () => import('./default-DH52dN_8.mjs')
+  default: () => import('./default-C-dc2_7N.mjs')
 };
 const LayoutLoader = defineComponent({
   name: "LayoutLoader",
