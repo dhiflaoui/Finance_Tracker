@@ -24,5 +24,10 @@ const links = [
     icon: "i-heroicons-cog-8-tooth",
     to: "/settings/settings",
   },
+  {
+    label: "Notifications",
+    icon: "i-heroicons-bell-alert",
+    to: "/settings/notifications",
+  },
 ];
 </script>
