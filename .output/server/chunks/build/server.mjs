@@ -745,33 +745,38 @@ const _routes = [
   {
     name: "index",
     path: "/",
-    component: () => import('./index-DPSAqKGc.mjs')
+    component: () => import('./index-B2IOjZGY.mjs')
   },
   {
     name: "login",
     path: "/login",
     meta: __nuxt_page_meta || {},
-    component: () => import('./login-vtj8eFvA.mjs')
+    component: () => import('./login-CvBjk_gN.mjs')
   },
   {
     name: "settings",
     path: "/settings",
-    component: () => import('./settings-Cf9pLU8G.mjs'),
+    component: () => import('./settings-BH6_XFlk.mjs'),
     children: [
       {
         name: "settings-avatar",
         path: "avatar",
-        component: () => import('./avatar-V2LOM6Sn.mjs')
+        component: () => import('./avatar-_IvAZkCD.mjs')
+      },
+      {
+        name: "settings-notifications",
+        path: "notifications",
+        component: () => import('./notifications-BilAbqfh.mjs')
       },
       {
         name: "settings-profile",
         path: "profile",
-        component: () => import('./profile-zVB4cXzo.mjs')
+        component: () => import('./profile-BBg8_iDo.mjs')
       },
       {
         name: "settings-settings",
         path: "settings",
-        component: () => import('./settings-B2l1EApn.mjs')
+        component: () => import('./settings-jiMlO26X.mjs')
       }
     ]
   }
@@ -2535,7 +2540,7 @@ const plugins = [
   prerender_server_LXx1wM9sKF
 ];
 const layouts = {
-  default: () => import('./default-C-dc2_7N.mjs')
+  default: () => import('./default-bqIQfkup.mjs')
 };
 const LayoutLoader = defineComponent({
   name: "LayoutLoader",
@@ -2931,7 +2936,7 @@ _sfc_main$7.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("node_modules/@nuxthq/ui/dist/runtime/components/elements/Avatar.vue");
   return _sfc_setup$7 ? _sfc_setup$7(props, ctx) : void 0;
 };
-const __nuxt_component_4 = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["ssrRender", _sfc_ssrRender$5]]);
+const __nuxt_component_5 = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["ssrRender", _sfc_ssrRender$5]]);
 async function preloadRouteComponents(to, router = useRouter()) {
   {
     return;
@@ -3567,12 +3572,12 @@ _sfc_main$5.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("node_modules/@nuxthq/ui/dist/runtime/components/elements/Button.vue");
   return _sfc_setup$5 ? _sfc_setup$5(props, ctx) : void 0;
 };
-const __nuxt_component_2$1 = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["ssrRender", _sfc_ssrRender$3]]);
+const __nuxt_component_3 = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["ssrRender", _sfc_ssrRender$3]]);
 const _sfc_main$4 = defineComponent({
   components: {
     UIcon: __nuxt_component_1,
-    UAvatar: __nuxt_component_4,
-    UButton: __nuxt_component_2$1
+    UAvatar: __nuxt_component_5,
+    UButton: __nuxt_component_3
   },
   props: {
     id: {
@@ -3677,8 +3682,8 @@ const _sfc_main$4 = defineComponent({
 });
 function _sfc_ssrRender$2(_ctx, _push, _parent, _attrs, $props, $setup, $data, $options) {
   const _component_UIcon = __nuxt_component_1;
-  const _component_UAvatar = __nuxt_component_4;
-  const _component_UButton = __nuxt_component_2$1;
+  const _component_UAvatar = __nuxt_component_5;
+  const _component_UButton = __nuxt_component_3;
   _push(`<template><div${ssrRenderAttrs(mergeProps({
     class: [_ctx.ui.wrapper, _ctx.ui.background, _ctx.ui.rounded, _ctx.ui.shadow]
   }, _attrs))}><div class="${ssrRenderClass([_ctx.ui.container, _ctx.ui.rounded, _ctx.ui.ring])}"><div class="${ssrRenderClass(_ctx.ui.padding)}"><div class="${ssrRenderClass([{ "items-start": _ctx.description || _ctx.$slots.description, "items-center": !_ctx.description && !_ctx.$slots.description }, "flex gap-3"])}">`);
@@ -4043,5 +4048,5 @@ let entry;
 }
 const entry$1 = (ssrContext) => entry(ssrContext);
 
-export { _export_sfc as _, __nuxt_component_0$2 as a, __nuxt_component_0$3 as b, __nuxt_component_1 as c, __nuxt_component_4 as d, entry$1 as default, appConfig as e, useAppConfig as f, classNames as g, __nuxt_component_2$1 as h, useNuxtApp as i, asyncDataDefaults as j, createError as k, useRuntimeConfig as l, __nuxt_component_0$1 as m, navigateTo as n, __nuxt_component_1$1 as o, getSlotsChildren as p, useToast as q, defineNuxtRouteMiddleware as r, useState as s, useHead as t, useSupabaseUser as u };
+export { _export_sfc as _, __nuxt_component_0$2 as a, __nuxt_component_0$3 as b, __nuxt_component_1 as c, __nuxt_component_5 as d, entry$1 as default, appConfig as e, useAppConfig as f, classNames as g, __nuxt_component_3 as h, useRuntimeConfig as i, __nuxt_component_0$1 as j, __nuxt_component_1$1 as k, useNuxtApp as l, asyncDataDefaults as m, navigateTo as n, createError as o, useToast as p, getSlotsChildren as q, defineNuxtRouteMiddleware as r, useState as s, useHead as t, useSupabaseUser as u };
 //# sourceMappingURL=server.mjs.map
