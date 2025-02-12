@@ -7,7 +7,7 @@
     <div>
       <div class="flex items-center gap-2">
         <!-- Notification Dropdown -->
-        <UDropdown
+        <!-- <UDropdown
           :items="notificationItems"
           :ui="{
             item: { disabled: 'cursor-pointer select-text' },
@@ -40,7 +40,7 @@
               />
             </div>
           </template>
-        </UDropdown>
+        </UDropdown> -->
 
         <!-- Theme Toggle -->
         <UButton

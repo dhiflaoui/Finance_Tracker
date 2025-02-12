@@ -1,3 +1,192 @@
+<script setup>
+import { ref, computed, watch, onMounted } from "vue";
+import { z } from "zod";
+import { useCategoryList } from "~/composables/useCategoryList";
+import { useAppToast } from "~/composables/useAppToast";
+import { useSupabaseClient, useSupabaseUser } from "#imports";
+
+const { toastSuccess, toastError } = useAppToast();
+const supabase = useSupabaseClient();
+const { categoryList } = useCategoryList();
+const user = useSupabaseUser();
+
+// Form state
+const limitType = ref("overall");
+const overallLimit = ref(0);
+const categoryLimits = ref([{ category: "", amount: 0 }]);
+const limitTimePeriod = ref("monthly");
+const pending = ref(false);
+const notifications = ref({
+  email: true,
+  push: false,
+  threshold: 80,
+});
+
+// Validation state
+const overallLimitError = ref("");
+const categoryLimitError = ref("");
+
+const timePeriodOptions = [
+  { value: "Daily", label: "Daily" },
+  { value: "Weekly", label: "Weekly" },
+  { value: "Monthly", label: "Monthly" },
+  { value: "Yearly", label: "Yearly" },
+];
+
+// Initialize state from user metadata
+const initializeState = () => {
+  const userMeta = user.value?.user_metadata?.spent_limiter;
+  if (userMeta) {
+    limitType.value = userMeta.limiterType || "overall";
+    limitTimePeriod.value = userMeta.limiterTimePeriod || "monthly";
+
+    if (userMeta.limiterType === "overall") {
+      overallLimit.value = Number(userMeta.limiterValue) || 0;
+      categoryLimits.value = [{ category: "", amount: 0 }];
+    } else {
+      overallLimit.value = 0;
+      categoryLimits.value = Array.isArray(userMeta.limiterCategories)
+        ? userMeta.limiterCategories.map((cat) => ({
+            category: cat.category || "",
+            amount: Number(cat.amount) || 0,
+          }))
+        : [{ category: "", amount: 0 }];
+    }
+  }
+};
+
+watch(limitType, (newType) => {
+  if (newType === "overall") {
+    categoryLimits.value = [{ category: "", amount: 0 }];
+    categoryLimitError.value = "";
+  } else {
+    overallLimit.value = 0;
+    overallLimitError.value = "";
+  }
+});
+
+// Validation schema
+const schema = computed(() => {
+  const baseSchema = {
+    notifications: z.object({
+      threshold: z.number().min(1).max(100),
+    }),
+  };
+
+  if (limitType.value === "overall") {
+    return z.object({
+      ...baseSchema,
+      overallLimit: z
+        .number()
+        .positive("Overall spending limit must be a positive number"),
+    });
+  }
+
+  return z.object({
+    ...baseSchema,
+    categoryLimits: z
+      .array(
+        z.object({
+          category: z.string().min(1, "Category is required"),
+          amount: z.number().min(0, "Amount must be non-negative"),
+        })
+      )
+      .min(1, "At least one category limit is required"),
+  });
+});
+
+const hasErrors = computed(() =>
+  Boolean(overallLimitError.value || categoryLimitError.value)
+);
+
+const addCategoryLimit = () => {
+  if (categoryLimits.value.length < categoryList.length) {
+    categoryLimits.value.push({ category: "", amount: 0 });
+  }
+};
+
+const removeCategoryLimit = (index) => {
+  if (categoryLimits.value.length > 1) {
+    categoryLimits.value.splice(index, 1);
+  }
+};
+
+const validateSettings = () => {
+  overallLimitError.value = "";
+  categoryLimitError.value = "";
+
+  try {
+    const validationData = {
+      notifications: {
+        threshold: Number(notifications.value.threshold),
+      },
+      ...(limitType.value === "overall"
+        ? { overallLimit: Number(overallLimit.value) }
+        : {
+            categoryLimits: categoryLimits.value.map((limit) => ({
+              category: limit.category,
+              amount: Number(limit.amount),
+            })),
+          }),
+    };
+
+    schema.value.parse(validationData);
+    return true;
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      error.errors.forEach((err) => {
+        const [field] = err.path;
+        if (field === "overallLimit") {
+          overallLimitError.value = err.message;
+        } else if (field === "categoryLimits") {
+          categoryLimitError.value = "Please check category limits for errors";
+        }
+      });
+    }
+    return false;
+  }
+};
+
+const saveSettings = async () => {
+  if (!validateSettings()) return;
+
+  pending.value = true;
+  try {
+    const { error } = await supabase.auth.updateUser({
+      data: {
+        spent_limiter: {
+          limiterValue:
+            limitType.value === "overall" ? Number(overallLimit.value) : 0,
+          limiterType: limitType.value,
+          limiterTimePeriod: limitTimePeriod.value,
+          limiterCategories:
+            limitType.value === "category"
+              ? categoryLimits.value.map((cat) => ({
+                  category: cat.category,
+                  amount: Number(cat.amount),
+                }))
+              : [],
+        },
+      },
+    });
+
+    if (error) throw error;
+    toastSuccess({ title: "Settings updated" });
+  } catch (error) {
+    toastError({
+      title: "Error updating settings",
+      description: error.message,
+    });
+  } finally {
+    pending.value = false;
+  }
+};
+
+onMounted(() => {
+  initializeState();
+});
+</script>
+
 <template>
   <div class="p-6">
     <UCard>
@@ -12,11 +201,13 @@
               v-model="limitType"
               value="overall"
               label="Overall Spending Limit"
+              :disabled="pending"
             />
             <URadio
               v-model="limitType"
               value="category"
               label="Category Spending Limits"
+              :disabled="pending"
             />
           </div>
         </UFormGroup>
@@ -33,9 +224,9 @@
                 min="0"
               />
             </div>
-            <span v-if="overallLimitError" class="text-red-500">{{
-              overallLimitError
-            }}</span>
+            <p v-if="overallLimitError" class="text-red-500 text-sm mt-1">
+              {{ overallLimitError }}
+            </p>
           </UFormGroup>
         </template>
 
@@ -67,7 +258,7 @@
                   variant="soft"
                   icon="i-heroicons-trash"
                   @click="removeCategoryLimit(index)"
-                  :disabled="pending"
+                  :disabled="pending || categoryLimits.length <= 1"
                 />
               </div>
             </div>
@@ -83,9 +274,9 @@
               "
               class="mt-2"
             />
-            <span v-if="categoryLimitError" class="text-red-500">{{
-              categoryLimitError
-            }}</span>
+            <p v-if="categoryLimitError" class="text-red-500 text-sm mt-1">
+              {{ categoryLimitError }}
+            </p>
           </UFormGroup>
         </template>
 
@@ -95,36 +286,6 @@
             :options="timePeriodOptions"
             :disabled="pending"
           />
-        </UFormGroup>
-
-        <UFormGroup label="Notification Settings" class="mb-4">
-          <div class="space-y-2">
-            <UCheckbox
-              v-model="notifications.email"
-              label="Email notifications"
-              :disabled="pending"
-            />
-            <UCheckbox
-              v-model="notifications.push"
-              label="Push notifications"
-              :disabled="pending"
-            />
-            <div class="mt-2">
-              <label class="text-sm text-gray-600">Warning Threshold</label>
-              <div class="flex items-center gap-2">
-                <UInput
-                  type="number"
-                  v-model="notifications.threshold"
-                  placeholder="Warning threshold %"
-                  class="w-32"
-                  :disabled="pending"
-                  min="1"
-                  max="100"
-                />
-                <span class="text-sm text-gray-600">% of limit</span>
-              </div>
-            </div>
-          </div>
         </UFormGroup>
 
         <UButton
@@ -140,158 +301,3 @@
     </UCard>
   </div>
 </template>
-
-<script setup>
-import { ref, computed, watch } from "vue";
-import { z } from "zod";
-import { useFetchTransactions } from "~/composables/useFetchTransactions";
-import { useCategoryList } from "~/composables/useCategoryList";
-
-const { categoryList } = useCategoryList();
-const {
-  setOverallLimit,
-  setCategoryLimit,
-  setLimitTimePeriod,
-  setNotificationSettings,
-} = useFetchTransactions();
-
-const limitType = ref("overall"); // New ref for tracking limit type
-const overallLimit = ref(0);
-const categoryLimits = ref([{ category: "", amount: 0 }]);
-const limitTimePeriod = ref("monthly");
-const pending = ref(false);
-const notifications = ref({
-  email: true,
-  push: false,
-  threshold: 80,
-});
-
-const overallLimitError = ref("");
-const categoryLimitError = ref("");
-
-const timePeriodOptions = [
-  { value: "daily", label: "Daily" },
-  { value: "weekly", label: "Weekly" },
-  { value: "monthly", label: "Monthly" },
-  { value: "yearly", label: "Yearly" },
-];
-
-// Reset values when changing limit type
-watch(limitType, (newType) => {
-  if (newType === "overall") {
-    categoryLimits.value = [{ category: "", amount: 0 }];
-    categoryLimitError.value = "";
-  } else {
-    overallLimit.value = 0;
-    overallLimitError.value = "";
-  }
-});
-
-const schema = computed(() => {
-  if (limitType.value === "overall") {
-    return z.object({
-      overallLimit: z
-        .number()
-        .positive("Overall spending limit must be a positive number."),
-      notifications: z.object({
-        threshold: z.number().min(1).max(100),
-      }),
-    });
-  } else {
-    return z.object({
-      categoryLimits: z.array(
-        z.object({
-          category: z.string().min(1, "Category is required"),
-          amount: z.number().min(0, "Amount must be non-negative"),
-        })
-      ),
-      notifications: z.object({
-        threshold: z.number().min(1).max(100),
-      }),
-    });
-  }
-});
-
-const hasErrors = computed(() => {
-  return overallLimitError.value || categoryLimitError.value;
-});
-
-const addCategoryLimit = () => {
-  categoryLimits.value.push({ category: "", amount: 0 });
-};
-
-const removeCategoryLimit = (index) => {
-  categoryLimits.value.splice(index, 1);
-};
-
-const validateSettings = () => {
-  overallLimitError.value = "";
-  categoryLimitError.value = "";
-
-  try {
-    const validationData =
-      limitType.value === "overall"
-        ? {
-            overallLimit: Number(overallLimit.value),
-            notifications: {
-              threshold: Number(notifications.value.threshold),
-            },
-          }
-        : {
-            categoryLimits: categoryLimits.value.map((limit) => ({
-              category: limit.category,
-              amount: Number(limit.amount),
-            })),
-            notifications: {
-              threshold: Number(notifications.value.threshold),
-            },
-          };
-
-    schema.value.parse(validationData);
-    return true;
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      error.errors.forEach((err) => {
-        if (err.path[0] === "overallLimit") {
-          overallLimitError.value = err.message;
-        } else if (err.path[0] === "categoryLimits") {
-          categoryLimitError.value = "Please check category limits for errors";
-        }
-      });
-    }
-    return false;
-  }
-};
-
-const saveSettings = async () => {
-  if (!validateSettings()) return;
-
-  pending.value = true;
-  try {
-    if (limitType.value === "overall") {
-      await setOverallLimit({
-        amount: overallLimit.value,
-      });
-    } else {
-      await Promise.all(
-        categoryLimits.value.map((limit) =>
-          setCategoryLimit({
-            category: limit.category,
-            amount: limit.amount,
-          })
-        )
-      );
-    }
-
-    await setLimitTimePeriod(limitTimePeriod.value);
-    await setNotificationSettings(notifications.value);
-
-    alert("Settings saved successfully!");
-  } catch (error) {
-    console.error("Error saving settings:", error);
-    alert("Failed to save settings. Please try again.");
-  } finally {
-    pending.value = false;
-  }
-};
-</script>
