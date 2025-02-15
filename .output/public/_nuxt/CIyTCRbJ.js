@@ -1,1 +1,0 @@
-import{ak as e}from"./CVTLfr-j.js";const t=()=>{const r=e();return{toastSuccess:({title:o,description:c=null})=>{r.add({title:o,description:c,icon:"i-heroicons-check-circle",color:"green",type:"success"})},toastError:({title:o,description:c=null})=>{r.add({title:o,description:c,icon:"i-heroicons-exclamation-circle",color:"red",type:"error"})}}};export{t as u};
