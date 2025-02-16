@@ -1,41 +1,96 @@
+import { ref, computed } from "vue";
+
+export const createLimitAlert = (currentValue, limitValue, period, type) => {
+  return {
+    isExceeded: currentValue > limitValue,
+    message: `Your spending of ${currentValue} for the ${period} period has exceeded your set limit of ${limitValue}. Please review your ${type}.`,
+  };
+};
+
 export const useSpentLimiter = (
   period,
   expenseValue,
   userData,
   categoryChosen = ""
 ) => {
-  const spentLimiterCategoryAlertMessage = ref("");
-  const spentLimiterAlertMessage = ref("");
+  const alertMessages = {
+    category: ref(""),
+    overall: ref(""),
+  };
+
+  // Early return if no user data is provided
+  if (!userData) {
+    return {
+      categoryAlert: computed(() => false),
+      overallAlert: computed(() => false),
+      categoryAlertMessage: alertMessages.category,
+      overallAlertMessage: alertMessages.overall,
+    };
+  }
+
   const { limiterValue, limiterTimePeriod, limiterType, limiterCategories } =
     userData;
-  const spentLimiterOverallAlert = computed(() => {
-    let result = false;
-    if (limiterTimePeriod === period.value) {
-      if (limiterType === "overall" && limiterValue !== 0) {
-        result = expenseValue.value > limiterValue;
-        spentLimiterAlertMessage.value = `Your spending of ${expenseValue.value} for the ${period.value} period has exceeded your set limit of ${limiterValue}. Please review your expenses.`;
-      }
+
+  // Check if the period matches the user's settings
+  const isPeriodMatching = computed(() => limiterTimePeriod === period.value);
+
+  // Handle overall spending limit
+  const overallAlert = computed(() => {
+    if (!isPeriodMatching.value || limiterType !== "overall" || !limiterValue) {
+      return false;
     }
-    return result;
+
+    const { isExceeded, message } = createLimitAlert(
+      expenseValue.value,
+      limiterValue,
+      period.value,
+      "expenses"
+    );
+
+    if (isExceeded) {
+      alertMessages.overall.value = message;
+    }
+
+    return isExceeded;
   });
-  const spentLimiterCategoryAlert = computed(() => {
-    let result = false;
-    if (limiterTimePeriod === period.value && limiterType === "category") {
-      const category = limiterCategories.find(
-        (cat) => cat.category === categoryChosen
-      );
-      if (category) {
-        result = expenseValue.value > category.amount;
-        spentLimiterCategoryAlertMessage.value = `Your spending of ${expenseValue.value} for the ${period.value} period has exceeded your set limit of ${category.amount}. Please review your expenses.`;
-      }
+
+  // Handle category-specific spending limit
+  const categoryAlert = computed(() => {
+    if (
+      !isPeriodMatching.value ||
+      limiterType !== "category" ||
+      !categoryChosen ||
+      !limiterCategories?.length
+    ) {
+      return false;
     }
-    return result;
+
+    const categoryLimit = limiterCategories.find(
+      (cat) => cat.category === categoryChosen
+    );
+
+    if (!categoryLimit) {
+      return false;
+    }
+
+    const { isExceeded, message } = createLimitAlert(
+      expenseValue.value,
+      categoryLimit.amount,
+      period.value,
+      "category expenses"
+    );
+
+    if (isExceeded) {
+      alertMessages.category.value = message;
+    }
+
+    return isExceeded;
   });
 
   return {
-    spentLimiterOverallAlert,
-    spentLimiterAlertMessage,
-    spentLimiterCategoryAlert,
-    spentLimiterCategoryAlertMessage,
+    categoryAlert,
+    overallAlert,
+    categoryAlertMessage: alertMessages.category,
+    overallAlertMessage: alertMessages.overall,
   };
 };

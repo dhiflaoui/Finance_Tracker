@@ -117,23 +117,22 @@ const save = async () => {
 };
 const viewSelection = computed(() => props.viewSelection);
 const amountSelected = computed(() => state.value.amount);
-const spentLimiterCategoryAlert = ref(false);
-const spentLimiterCategoryAlertMessage = ref("");
+const categoryAlert = ref(false);
+const categoryAlertMessage = ref("");
 watch(
   [() => state.value.category, () => state.value.amount],
   ([newCategory, newAmount]) => {
     if (!user.value?.user_metadata?.spent_limiter) return;
-    const {
-      spentLimiterCategoryAlert: alert,
-      spentLimiterCategoryAlertMessage: message,
-    } = useSpentLimiter(
-      viewSelection,
-      amountSelected,
-      user.value.user_metadata.spent_limiter,
-      newCategory
-    );
-    spentLimiterCategoryAlert.value = alert.value;
-    spentLimiterCategoryAlertMessage.value = message.value;
+
+    const { categoryAlert: alert, categoryAlertMessage: message } =
+      useSpentLimiter(
+        viewSelection,
+        amountSelected,
+        user.value.user_metadata.spent_limiter,
+        newCategory
+      );
+    categoryAlert.value = alert.value;
+    categoryAlertMessage.value = message.value;
   }
 );
 </script>
@@ -190,7 +189,6 @@ watch(
             v-model="state.created_at"
           />
         </UFormGroup>
-        viewSelection {{ viewSelection }}
         <UFormGroup
           label="Description"
           hint="Optional"
@@ -213,15 +211,11 @@ watch(
           ></USelectMenu>
         </UFormGroup>
         <!-- spent alert -->
-        <div v-if="spentLimiterCategoryAlert" style="padding-bottom: 20px">
-          <UAlert
-            icon="i-heroicons-exclamation-circle"
-            variant="soft"
-            color="red"
-            :title="`Spent Limiter Alert!`"
-            :description="spentLimiterCategoryAlertMessage"
-          />
-        </div>
+        <SpentLimitAlert
+          :show="categoryAlert"
+          :message="categoryAlertMessage"
+          variant="soft"
+        />
         <UButton
           type="submit"
           color="black"

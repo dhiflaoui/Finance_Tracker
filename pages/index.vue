@@ -123,7 +123,7 @@ watch(viewSelection, () => {
   clearSearch();
 });
 
-const { spentLimiterOverallAlert, spentLimiterAlertMessage } = useSpentLimiter(
+const { overallAlert, overallAlertMessage } = useSpentLimiter(
   viewSelection,
   expenseTotal,
   user.value.user_metadata?.spent_limiter
@@ -182,7 +182,12 @@ const { spentLimiterOverallAlert, spentLimiterAlertMessage } = useSpentLimiter(
       />
     </section>
     <!-- spent limiter alert Section -->
-    <section
+    <SpentLimitAlert
+      :show="overallAlert"
+      :message="overallAlertMessage"
+      variant="outline"
+    />
+    <!-- <section
       v-if="!pending && spentLimiterOverallAlert"
       style="padding-bottom: 20px"
     >
@@ -199,7 +204,7 @@ const { spentLimiterOverallAlert, spentLimiterAlertMessage } = useSpentLimiter(
         :title="`Spent Limiter Alert!`"
         :description="spentLimiterAlertMessage"
       />
-    </section>
+    </section> -->
     <!-- Transaction Header with Search -->
     <section class="flex justify-between mb-10">
       <div>
