@@ -1,88 +1,3 @@
-<template>
-  <UModal v-model="isOpen">
-    <UCard>
-      <template #header>
-        <div class="modal-header">
-          <span>{{ isEditing ? "Edit Transaction" : "Add Transaction" }}</span>
-          <UButton
-            icon="i-heroicons-x-mark-20-solid"
-            @click="isOpen = false"
-            class="close-button"
-            color="gray"
-            variant="ghost"
-            :ui="{
-              padding: 'p-1',
-              rounded: 'rounded-full',
-              color: {
-                gray: {
-                  ghost: 'hover:bg-gray-100 text-gray-500 hover:text-gray-700',
-                },
-              },
-            }"
-          />
-        </div>
-      </template>
-      <UForm :state="state" ref="form" @submit.prevent="save" :schema="schema">
-        <UFormGroup
-          label="Transaction type"
-          :required="true"
-          name="type"
-          class="mb-4"
-        >
-          <USelectMenu
-            v-model="state.type"
-            :options="types"
-            placeholder="Select the transaction type"
-            :disabled="isEditing"
-          ></USelectMenu>
-        </UFormGroup>
-        <UFormGroup label="Amount" :required="true" name="amount" class="mb-4">
-          <UInput
-            type="number"
-            placeholder="Amount"
-            v-model.number="state.amount"
-          />
-        </UFormGroup>
-        <UFormGroup label="Transaction date" name="created_at" class="mb-4">
-          <UInput
-            type="date"
-            :icon="'i-heroicons-calendar-days-20-solid'"
-            v-model="state.created_at"
-          />
-        </UFormGroup>
-        <UFormGroup
-          label="Description"
-          hint="Optional"
-          name="desc"
-          class="mb-4"
-        >
-          <UInput placeholder="Description" v-model="state.description" />
-        </UFormGroup>
-        <UFormGroup
-          label="Category"
-          :required="true"
-          name="category"
-          class="mb-4"
-          v-if="state.type === 'Expense'"
-        >
-          <USelectMenu
-            :options="categoryList"
-            placeholder="Select a category"
-            v-model="state.category"
-          ></USelectMenu>
-        </UFormGroup>
-        <UButton
-          type="submit"
-          color="black"
-          label="Save"
-          variant="solid"
-          :loading="isLoading"
-        />
-      </UForm>
-    </UCard>
-  </UModal>
-</template>
-
 <script setup>
 import { types } from "~/constants";
 import { z } from "zod";
@@ -94,6 +9,10 @@ const props = defineProps({
   transaction: {
     type: Object,
     required: false,
+  },
+  viewSelection: {
+    type: String,
+    default: "Daily",
   },
 });
 const { categoryList } = useCategoryList();
@@ -196,7 +115,124 @@ const save = async () => {
     isLoading.value = false;
   }
 };
+const viewSelection = computed(() => props.viewSelection);
+const amountSelected = computed(() => state.value.amount);
+const spentLimiterCategoryAlert = ref(false);
+const spentLimiterCategoryAlertMessage = ref("");
+watch(
+  [() => state.value.category, () => state.value.amount],
+  ([newCategory, newAmount]) => {
+    if (!user.value?.user_metadata?.spent_limiter) return;
+    const {
+      spentLimiterCategoryAlert: alert,
+      spentLimiterCategoryAlertMessage: message,
+    } = useSpentLimiter(
+      viewSelection,
+      amountSelected,
+      user.value.user_metadata.spent_limiter,
+      newCategory
+    );
+    spentLimiterCategoryAlert.value = alert.value;
+    spentLimiterCategoryAlertMessage.value = message.value;
+  }
+);
 </script>
+<template>
+  <UModal v-model="isOpen">
+    <UCard>
+      <template #header>
+        <div class="modal-header">
+          <span>{{ isEditing ? "Edit Transaction" : "Add Transaction" }}</span>
+          <UButton
+            icon="i-heroicons-x-mark-20-solid"
+            @click="isOpen = false"
+            class="close-button"
+            color="gray"
+            variant="ghost"
+            :ui="{
+              padding: 'p-1',
+              rounded: 'rounded-full',
+              color: {
+                gray: {
+                  ghost: 'hover:bg-gray-100 text-gray-500 hover:text-gray-700',
+                },
+              },
+            }"
+          />
+        </div>
+      </template>
+      <UForm :state="state" ref="form" @submit.prevent="save" :schema="schema">
+        <UFormGroup
+          label="Transaction type"
+          :required="true"
+          name="type"
+          class="mb-4"
+        >
+          <USelectMenu
+            v-model="state.type"
+            :options="types"
+            placeholder="Select the transaction type"
+            :disabled="isEditing"
+          ></USelectMenu>
+        </UFormGroup>
+
+        <UFormGroup label="Amount" :required="true" name="amount" class="mb-4">
+          <UInput
+            type="number"
+            placeholder="Amount"
+            v-model.number="state.amount"
+          />
+        </UFormGroup>
+        <UFormGroup label="Transaction date" name="created_at" class="mb-4">
+          <UInput
+            type="date"
+            :icon="'i-heroicons-calendar-days-20-solid'"
+            v-model="state.created_at"
+          />
+        </UFormGroup>
+        viewSelection {{ viewSelection }}
+        <UFormGroup
+          label="Description"
+          hint="Optional"
+          name="desc"
+          class="mb-4"
+        >
+          <UInput placeholder="Description" v-model="state.description" />
+        </UFormGroup>
+        <UFormGroup
+          label="Category"
+          :required="true"
+          name="category"
+          class="mb-4"
+          v-if="state.type === 'Expense'"
+        >
+          <USelectMenu
+            :options="categoryList"
+            placeholder="Select a category"
+            v-model="state.category"
+          ></USelectMenu>
+        </UFormGroup>
+        <!-- spent alert -->
+        <div v-if="spentLimiterCategoryAlert" style="padding-bottom: 20px">
+          <UAlert
+            icon="i-heroicons-exclamation-circle"
+            variant="soft"
+            color="red"
+            :title="`Spent Limiter Alert!`"
+            :description="spentLimiterCategoryAlertMessage"
+          />
+        </div>
+        <UButton
+          type="submit"
+          color="black"
+          label="Save"
+          variant="solid"
+          :loading="isLoading"
+        />
+      </UForm>
+    </UCard>
+  </UModal>
+</template>
 <style scoped>
 .modal-header {
   display: flex;

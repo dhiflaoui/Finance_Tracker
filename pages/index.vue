@@ -282,6 +282,7 @@ const { spentLimiterOverallAlert, spentLimiterAlertMessage } = useSpentLimiter(
               @deleteTransaction="refresh()"
               @editTransaction="refresh()"
               :viewSelection="viewSelection"
+              :expenseTotal="expenseTotal"
             />
           </div>
         </div>
