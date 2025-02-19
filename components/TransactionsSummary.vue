@@ -1,0 +1,41 @@
+<script setup>
+defineProps([
+  "incomeTotal",
+  "prevIncomeTotal",
+  "expenseTotal",
+  "prevExpenseTotal",
+  "investmentsTotal",
+  "savingsTotal",
+  "pending",
+]);
+</script>
+<template>
+  <Trend
+    color="green"
+    title="Total Income"
+    :amount="incomeTotal"
+    :lastAmount="prevIncomeTotal"
+    :loading="pending"
+  />
+  <Trend
+    color="red"
+    title="Expenses"
+    :amount="expenseTotal"
+    :lastAmount="prevExpenseTotal"
+    :loading="pending"
+  />
+  <Trend
+    color="green"
+    title="Investments"
+    :amount="investmentsTotal"
+    :lastAmount="0"
+    :loading="pending"
+  />
+  <Trend
+    color="green"
+    title="Savings"
+    :amount="savingsTotal"
+    :lastAmount="0"
+    :loading="pending"
+  />
+</template>

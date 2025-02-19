@@ -28,18 +28,18 @@
 
 <script setup>
 import { computed } from "vue";
-const { TransactionPerDate } = defineProps({
-  TransactionPerDate: {
+const { transactions } = defineProps({
+  transactions: {
     type: Object,
     required: true,
   },
 });
 // Chart data computation
 const transactionChartData = computed(() => {
-  const dates = Object.keys(TransactionPerDate);
+  const dates = Object.keys(transactions);
   const incomeData = [];
   const expenseData = [];
-  const listTransactionsData = Object.values(TransactionPerDate);
+  const listTransactionsData = Object.values(transactions);
 
   listTransactionsData.forEach((transactionData) => {
     const dayIncome = transactionData.reduce((sum, t) => {
@@ -76,7 +76,7 @@ const transactionChartData = computed(() => {
 });
 const categoryChartData = computed(() => {
   const categories = {};
-  Object.values(TransactionPerDate)
+  Object.values(transactions)
     .flat()
     .forEach((transaction) => {
       if (!categories[transaction.category]) {
