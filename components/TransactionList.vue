@@ -2,7 +2,7 @@
 defineProps({
   pending: {
     type: Boolean,
-    required: true,
+    // required: true,
   },
   transactions: {
     type: Object,

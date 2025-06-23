@@ -1,14 +1,17 @@
-<script setup>
-defineProps([
-  "incomeTotal",
-  "prevIncomeTotal",
-  "expenseTotal",
-  "prevExpenseTotal",
-  "investmentsTotal",
-  "savingsTotal",
-  "pending",
-]);
+<script setup lang="ts">
+interface TransactionsSummaryProps {
+  incomeTotal: number;
+  prevIncomeTotal: number;
+  expenseTotal: number;
+  prevExpenseTotal: number;
+  investmentsTotal: number;
+  savingsTotal: number;
+  pending: boolean;
+}
+
+defineProps<TransactionsSummaryProps>();
 </script>
+
 <template>
   <Trend
     color="green"

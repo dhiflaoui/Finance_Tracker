@@ -1,4 +1,5 @@
 <template>
+  transactions{{ transactions }}
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     <!-- Income vs Expenses Chart -->
     <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">

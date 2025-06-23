@@ -20,6 +20,7 @@
 - [x] problem when change from weekly or monthly to daily
 - [x] fix search transaction on the transaction page
 - [x] improve the UI of the list of transactions
+- [ ] fix display list transaction when minimize the window
 
 ## Features
 
@@ -43,7 +44,7 @@
 ## upcoming features
 
 - [ ] add a feature to set a limit of expenses by category
-- [] add security features to the application when login and signUp
+- [ ] add security features to the application when login and signUp
 - [ ] add notification system
 
 ## Backlog
