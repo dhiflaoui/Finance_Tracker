@@ -723,7 +723,8 @@ const __nuxt_page_meta$1 = {
   layout: "empty"
 };
 const __nuxt_page_meta = {
-  middleware: "auth"
+  middleware: "auth",
+  layout: false
 };
 const _routes = [
   {
@@ -745,13 +746,13 @@ const _routes = [
   {
     name: "index",
     path: "/",
-    component: () => import('./index-BOYIc1rp.mjs')
+    component: () => import('./index-Dek9egH8.mjs')
   },
   {
     name: "login",
     path: "/login",
     meta: __nuxt_page_meta || {},
-    component: () => import('./login-CE4cJHB8.mjs')
+    component: () => import('./login-D-GWRfLL.mjs')
   },
   {
     name: "settings",
@@ -766,7 +767,7 @@ const _routes = [
       {
         name: "settings-notifications",
         path: "notifications",
-        component: () => import('./notifications-Bvbi3edS.mjs')
+        component: () => import('./notifications-wX9NuK0q.mjs')
       },
       {
         name: "settings-profile",
@@ -776,7 +777,7 @@ const _routes = [
       {
         name: "settings-settings",
         path: "settings",
-        component: () => import('./settings-DneuRcDX.mjs')
+        component: () => import('./settings-Cw_JXOt3.mjs')
       }
     ]
   }
@@ -2540,7 +2541,7 @@ const plugins = [
   prerender_server_LXx1wM9sKF
 ];
 const layouts = {
-  default: () => import('./default-DLW3ifnX.mjs')
+  default: () => import('./default-DEHM2K-F.mjs')
 };
 const LayoutLoader = defineComponent({
   name: "LayoutLoader",
