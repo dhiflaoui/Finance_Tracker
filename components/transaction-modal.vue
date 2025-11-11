@@ -19,6 +19,7 @@ const { categoryList } = useCategoryList();
 
 const isEditing = computed(() => !!props.transaction);
 const emit = defineEmits(["update:modelValue", "saved"]);
+
 //Zod validation schema
 const defaultSchema = z.object({
   created_at: z.string().optional(),
@@ -57,7 +58,7 @@ const isOpen = computed({
 const initialState = isEditing.value
   ? {
       type: props.transaction.type,
-      amount: props.transaction.amount,
+      amount: parseFloat(props.transaction.amount) || 0,
       created_at: props.transaction.created_at.split("T")[0],
       description: props.transaction.description,
       category: props.transaction.category,
@@ -70,16 +71,33 @@ const initialState = isEditing.value
       category: "other",
     };
 const state = ref({ ...initialState });
+
 const resetForm = () => {
   Object.assign(state.value, initialState);
 };
 const form = ref();
 const isLoading = ref(false);
 const { toastSuccess, toastError } = useAppToast();
+
+// Watch amount to ensure it's always a number
+watch(() => state.value.amount, (newAmount) => {
+  if (typeof newAmount === 'string' && newAmount !== '') {
+    const parsed = parseFloat(newAmount);
+    if (!isNaN(parsed)) {
+      state.value.amount = parsed;
+    }
+  }
+}, { immediate: false });
+
 const save = async () => {
+  // Ensure amount is a number before validation
+  if (state.value.amount) {
+    state.value.amount = parseFloat(state.value.amount);
+  }
+  
   const isValid = await form.value.validate();
   if (!isValid) {
-    toastSuccess({
+    toastError({
       title: "Validation Error",
       description: "Please fix the errors in the form.",
     });
@@ -87,24 +105,31 @@ const save = async () => {
   }
   isLoading.value = true;
   try {
+    const transactionData = {
+      ...state.value,
+      amount: parseFloat(state.value.amount),
+      id: props.transaction?.id
+    };
+    
     const { data: result, error } = await supabase
       .from("transactions")
-      .upsert({ ...state.value, id: props.transaction?.id });
+      .upsert(transactionData);
+      
     if (error) {
       toastError({
         title: "Transaction not saved",
-        description: `Error while saving transaction `,
+        description: `Error while saving transaction ${error.message}`,
       });
       console.error("error while saving transaction: ", error);
+    } else {
+      console.log("result after save in supabase: ", result);
+      isOpen.value = false;
+      emit("saved");
+      toastSuccess({
+        title: "Transaction saved",
+        description: "Transaction saved successfully",
+      });
     }
-    console.log("result after save in supabase: ", result);
-    /*  throw error; */
-    isOpen.value = false;
-    emit("saved");
-    toastSuccess({
-      title: "Transaction saved",
-      description: "Transaction saved successfully",
-    });
   } catch (error) {
     toastError({
       title: "Transaction not saved",
@@ -115,10 +140,12 @@ const save = async () => {
     isLoading.value = false;
   }
 };
+
 const viewSelection = computed(() => props.viewSelection);
 const amountSelected = computed(() => state.value.amount);
 const categoryAlert = ref(false);
 const categoryAlertMessage = ref("");
+
 watch(
   [() => state.value.category, () => state.value.amount],
   ([newCategory, newAmount]) => {
@@ -180,6 +207,7 @@ watch(
             type="number"
             placeholder="Amount"
             v-model.number="state.amount"
+            step="0.01"
           />
         </UFormGroup>
         <UFormGroup label="Transaction date" name="created_at" class="mb-4">
